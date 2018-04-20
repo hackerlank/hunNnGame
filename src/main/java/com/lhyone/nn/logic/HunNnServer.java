@@ -1,9 +1,14 @@
 package com.lhyone.nn.logic;
 
+import java.util.concurrent.TimeUnit;
+
+import com.lhyone.nn.enums.NnTimeTaskEnum;
 import com.lhyone.nn.enums.RedisMQEnum;
 import com.lhyone.nn.logic.handler.DataInit;
+import com.lhyone.nn.logic.handler.MyTimerTask;
 import com.lhyone.nn.logic.handler.NnDealHandler;
 import com.lhyone.nn.logic.handler.RedisSubMQThread;
+import com.lhyone.nn.logic.handler.ServerManager;
 import com.lhyone.nn.pb.HunNnBean;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -36,6 +41,7 @@ public class HunNnServer {
     	new RedisSubMQThread(RedisMQEnum.CLOSE_ROOM_CHANNEL.getCode()).start();
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
+        ServerManager.executorTask.scheduleWithFixedDelay(new MyTimerTask(null,NnTimeTaskEnum.LISTEN_TIME.getCode()), 0, 1, TimeUnit.SECONDS);
         try{
         	DataInit.dataInit(port);
             System.out.println("服务已启动");

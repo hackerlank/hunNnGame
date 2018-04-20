@@ -170,7 +170,7 @@ public class HunNnManager {
 			uinfo.setNickName(uv.getUserName());//
 			uinfo.setHeadUrl(uv.getHeadImgUrl());//
 			uinfo.setMark(uv.getMark());
-			uinfo.setGender(1);
+			uinfo.setGender(uv.getGender());
 			uinfo.setPlayerType(NnUserRoleEnum.GUEST.getCode());// 设置用角色为游客
 			uinfo.setRoomNo(reqMsg.getRoomNo());
 			uinfo.setUserGold((int) NnManagerDao.instance().getUserGold(reqMsg.getUserId()));
@@ -735,7 +735,7 @@ public class HunNnManager {
 	 */
 	public static void farmerAddChip(HunNnBean.ReqMsg reqMsg, ChannelHandlerContext ctx) {
 		
-		
+		long a=System.currentTimeMillis();
 		if (LocalCacheUtil.hexist(NnConstans.NN_ROOM_LOCK_REQ+reqMsg.getRoomNo(), reqMsg.getUserId()+"")) {
 			System.out.println("重复操作》》》》》》》》");
 			return;
@@ -868,6 +868,8 @@ public class HunNnManager {
 				pushsingle(rspMsg.build(), ctx);
 				
 			}
+			long b=System.currentTimeMillis();
+			System.out.println("执行时间============"+(b-a));
 //			batchSendAddChip(reqMsg,position);
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1222,16 +1224,8 @@ public class HunNnManager {
 		//设置庄家位置总盈亏
 		landlordPosition.setWinGold(landlordUser.getWinGold());
 		
-		
-		
-		 
-		 
-		 
-		 
 		 allUserMap.put(landlordUser.getUserId(), landlordUser);
 		 
-		 
-		
 		// 更新缓存
 		for (Long key: allUserMap.keySet()) {
 			RedisUtil.hset(NnConstans.NN_ROOM_USER_INFO_PRE + roomNo, key + "", JsonFormat.printToString(allUserMap.get(key).build()));
@@ -1633,6 +1627,12 @@ public class HunNnManager {
 		String landlordUserId = RedisUtil.get(NnConstans.NN_ROOM_LANDLORD_USER_PRE + roomNo);
 		HunNnBean.UserInfo.Builder landLordUser = getCurUser(Long.parseLong(landlordUserId), roomNo);
 		List<HunNnBean.PositionInfo> listPosition = NnUtil.getPositionInfo(roomNo);
+		
+		
+		for(HunNnBean.PositionInfo position:listPosition){
+			position=position.toBuilder().clearUserChip().clearUids().clearListGold().build();
+		}
+
 		int time = getRestTime(roomNo);
 		for (String key : allUserSet) {
 

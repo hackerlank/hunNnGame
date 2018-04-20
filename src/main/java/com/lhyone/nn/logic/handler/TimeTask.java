@@ -24,7 +24,6 @@ public class TimeTask implements Runnable {
 	}
 	
 	private void goRun(){
-		System.out.println("========================================================");
 		if(NnTimeTaskEnum.PLAY_GAME_TIME.getCode()==type){
 			
 			GameTimoutVo timeVo=getGameTimoutVo(reqMsg.getRoomNo());
