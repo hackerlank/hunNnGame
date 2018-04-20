@@ -2,26 +2,19 @@ package com.lhyone.nn.vo;
 
 public class GameTimoutVo {
 	
-	private long playGameTime;
-	private long showMatchResultTime;
-	private long idleTime;
-	public long getPlayGameTime() {
-		return playGameTime;
+	private long restTime;
+	private int restTimeType;
+	public long getRestTime() {
+		return restTime;
 	}
-	public void setPlayGameTime(long playGameTime) {
-		this.playGameTime = playGameTime;
+	public void setRestTime(long restTime) {
+		this.restTime = restTime;
 	}
-	public long getShowMatchResultTime() {
-		return showMatchResultTime;
+	public int getRestTimeType() {
+		return restTimeType;
 	}
-	public void setShowMatchResultTime(long showMatchResultTime) {
-		this.showMatchResultTime = showMatchResultTime;
+	public void setRestTimeType(int restTimeType) {
+		this.restTimeType = restTimeType;
 	}
-	public long getIdleTime() {
-		return idleTime;
-	}
-	public void setIdleTime(long idleTime) {
-		this.idleTime = idleTime;
-	}
-
+	
 }

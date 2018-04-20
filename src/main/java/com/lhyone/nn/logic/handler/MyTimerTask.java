@@ -4,7 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
+import com.googlecode.protobuf.format.JsonFormat;
+import com.lhyone.nn.dao.NnManagerDao;
 import com.lhyone.nn.enums.NnTimeTaskEnum;
+import com.lhyone.nn.enums.NnUserRoleEnum;
+import com.lhyone.nn.enums.NnYesNoEnum;
 import com.lhyone.nn.pb.HunNnBean;
 import com.lhyone.nn.pb.HunNnBean.ReqMsg;
 import com.lhyone.nn.util.NnConstans;
@@ -17,11 +21,9 @@ public class MyTimerTask implements Runnable{
 		
 	private HunNnBean.ReqMsg reqMsg;
 	private int type;
-	private long startTime;
-	public MyTimerTask(HunNnBean.ReqMsg reqMsg,int type,long startTime){
+	public MyTimerTask(HunNnBean.ReqMsg reqMsg,int type){
 		this.reqMsg=reqMsg;
 		this.type=type;
-		this.startTime=startTime;
 	}
 	
 	public void run() {
@@ -31,41 +33,63 @@ public class MyTimerTask implements Runnable{
 	private void nnTask(){
 		
 	try{
-		//标识位
-		boolean flag=false;
-		//庄家准备
-		if(NnTimeTaskEnum.USER_REDAY_TIME.getCode()==type){
-			//如果庄家在规定的时间没有准备,剔除庄家
+		
+		if(NnTimeTaskEnum.LISTEN_TIME.getCode()==type){
+			RedisUtil.set(NnConstans.NN_SYS_CUR_TIME_CACHE, System.currentTimeMillis()+"");
+		}else{	
+			GameTimoutVo timeVo= getGameTimoutVo(reqMsg.getRoomNo());
+			if(NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode()==type&&null!=timeVo){//庄家准备
 			
-			//删除庄家缓存
-			HunNnBean.PositionInfo.Builder landlordPosition=HunNnBean.PositionInfo.newBuilder();
-			landlordPosition.setPosition(1);
-			NnUtil.setPosition(landlordPosition, reqMsg.getRoomNo(),1);
-			RedisUtil.del(NnConstans.NN_ROOM_LANDLORD_USER_PRE+reqMsg.getRoomNo());
-			//清除用户准备倒计时
-			RedisUtil.hdel(NnConstans.NN_ROOM_USER_REDAY_TIME_PRE+reqMsg.getRoomNo(), reqMsg.getUserId()+"");
-			//设置新的庄家
-			HunNnManager.setLandlord(reqMsg.getRoomNo());
+				
+				HunNnBean.UserInfo.Builder userInfo=HunNnManager.getCurUser(reqMsg.getUserId(), reqMsg.getRoomNo());
+				if(userInfo.getIsReday()==NnYesNoEnum.YES.getCode()&&null!=userInfo){
+					HunNnManager.idleTimeTask(reqMsg);
+				}else{
+					
+					//如果庄家在规定的时间没有准备,剔除庄家
+					//删除庄家缓存
+					HunNnBean.PositionInfo.Builder landlordPosition=HunNnBean.PositionInfo.newBuilder();
+					landlordPosition.setPosition(1);
+					NnUtil.setPosition(landlordPosition, reqMsg.getRoomNo(),1);
+					RedisUtil.del(NnConstans.NN_ROOM_LANDLORD_USER_PRE+reqMsg.getRoomNo());
+					//清除用户准备倒计时
+					NnManagerDao.instance().deleteApplyLandlorder(reqMsg.getRoomNo(), reqMsg.getUserId());
+					
+					userInfo.setPlayerType(NnUserRoleEnum.GUEST.getCode());
+					userInfo.clearIsApplyLandlord();
+					userInfo.clearLandlordTimes();
+					userInfo.clearIsReday();
+				
+					RedisUtil.hset(NnConstans.NN_ROOM_USER_INFO_PRE+reqMsg.getRoomNo(), reqMsg.getUserId()+"", JsonFormat.printToString(userInfo.build()));
+					
+					HunNnBean.RoomInfo.Builder roomInfo=HunNnManager.getRoomInfo(reqMsg.getRoomNo());
+					roomInfo.clearCurLandlordTimes();
+					
+					RedisUtil.hset(NnConstans.NN_ROOM_PRE+reqMsg.getRoomNo(), "roomInfo", JsonFormat.printToString(roomInfo.build()));
+					
+					//设置新的庄家
+					HunNnManager.setLandlord(reqMsg.getRoomNo());
+				
+				}
 			
-		}
-		//闲家加分倒计时
-		if(NnTimeTaskEnum.PLAY_GAME_TIME.getCode()==type){
-			//倒计时结束后进行发牌操作
-			HunNnManager.sendCard(reqMsg);
-			
-		}
-		//展示比赛结果
-		if(NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode()==type){
-			//时间到了触发一段空闲时间，主要是推送庄家准备倒计时,清除上局比赛的用户缓存数据
-			HunNnManager.setLandlordTimerTask(reqMsg);
-			
-		}
-		//游戏空闲倒计时
-		if(NnTimeTaskEnum.GAME_IDLE_TIME.getCode()==type){
-			HunNnManager.idleTimeTask(reqMsg);
-			
+			}
+			//闲家加分倒计时
+			if(NnTimeTaskEnum.PLAY_GAME_TIME.getCode()==type){
+				//倒计时结束后进行发牌操作
+				ServerManager.futures.get(reqMsg.getRoomNo()).cancel(true);
+				HunNnManager.sendCard(reqMsg);
+				
+				
+			}
+			//展示比赛结果
+			if(NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode()==type){
+				//时间到了触发一段空闲时间，主要是推送庄家准备倒计时,清除上局比赛的用户缓存数据
+				HunNnManager.setLandlordTimerTask(reqMsg);
+				
+			}
 		}
 		}catch(Exception e){
+			System.out.println("定时器异常");
 			logger.info(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -77,38 +101,14 @@ public class MyTimerTask implements Runnable{
 	 * @param reqMsg
 	 * @return
 	 */
-	private static GameTimoutVo getGameTimoutVo(ReqMsg reqMsg){
+	private static GameTimoutVo getGameTimoutVo(String roomNo){
 		
-		String str=RedisUtil.hget(NnConstans.NN_REST_TIME_PRE, reqMsg.getRoomNo());
+		String str=RedisUtil.hget(NnConstans.NN_REST_TIME_PRE,roomNo);
 		
 		if(str!=null){
 			return JSONObject.parseObject(str, GameTimoutVo.class);
 		}
 		return null;
-	}
-	
-	
-	private static boolean isRunTimer(long time,int type){
-		
-		long curTime=System.currentTimeMillis();
-		long diffTime=Math.abs((curTime-time)/1000);
-		long timer=0;
-		
-		if(NnTimeTaskEnum.PLAY_GAME_TIME.getCode()==type){
-			timer=NnConstans.PLAY_GAME_TIME;
-		}else if(NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode()==type){
-			timer=NnConstans.SHOW_MATCH_RESULT_TIME;
-		}else if(NnTimeTaskEnum.GAME_IDLE_TIME.getCode()==type){
-			timer=NnConstans.GAME_IDLE_TIME;
-		}else if(NnTimeTaskEnum.USER_REDAY_TIME.getCode()==type){
-			timer=NnConstans.USER_REDAY_TIME;
-		}
-		
-		//延迟两秒
-		if(diffTime<(timer+2)){
-			return true;
-		}
-		return false;
 	}
 
 }

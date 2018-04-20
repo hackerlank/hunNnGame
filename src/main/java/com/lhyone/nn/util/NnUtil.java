@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.googlecode.protobuf.format.JsonFormat;
 import com.lhyone.nn.dao.NnManagerDao;
 import com.lhyone.nn.entity.NnRoomMultipleDic;
+import com.lhyone.nn.enums.NnCardRuleEnum;
 import com.lhyone.nn.pb.HunNnBean;
 import com.lhyone.util.RedisUtil;
 
@@ -169,9 +170,8 @@ public class NnUtil {
 		List<HunNnBean.PositionInfo>  list=getPositionInfo(roomNo);
 		
 		Map<String,HunNnBean.PositionInfo> map=new HashMap<String,HunNnBean.PositionInfo>();
-		for(int i=0;i<list.size();i++){
-			HunNnBean.PositionInfo bean=list.get(0);
-			map.put(i+++"", bean);
+		for(HunNnBean.PositionInfo bean:list){
+			map.put(bean.getPosition()+"", bean);
 		}
 		
 		return map;
@@ -192,11 +192,12 @@ public class NnUtil {
 		}
 		
 		position.setPosition(1);
-		List<Long> listUid= position.getUidsList();
+		List<Long> listUid=new ArrayList<Long>(position.getUidsList());
 		
 		if(!listUid.contains(userId)){
 			listUid.add(userId);
 		}
+		position.addAllUids(listUid);
 		
 		RedisUtil.hset(NnConstans.NN_ALL_POSITION_CACHE_PRE+roomNo,"p1",JsonFormat.printToString(position.build()));
 	}
@@ -231,6 +232,50 @@ public class NnUtil {
 		
 	}
 	
+	/**
+	 * 设置房间发送金币定时计数
+	 * @param roomNo
+	 */
+	public static void setNnRoomSendGoldTimer(String roomNo){
+		String str=RedisUtil.hget(NnConstans.NN_ROOM_PRE+roomNo, "sendGoldTimer");
+		int sendGoldTimer=0;
+		if(StringUtils.isEmpty(str)){
+			sendGoldTimer=1;
+		}else{
+			sendGoldTimer+=Integer.parseInt(str);
+		}
+		RedisUtil.hset(NnConstans.NN_ROOM_PRE+roomNo, "sendGoldTimer", sendGoldTimer+"");
+		
+	}
+	
+	/**
+	 * 获取房间金币定时计数
+	 * @param roomNo
+	 * @return
+	 */
+	public static int getNnRoomSendGoldTimer(String roomNo){
+		String str=RedisUtil.hget(NnConstans.NN_ROOM_PRE+roomNo, "sendGoldTimer");
+		int sendGoldTimer=0;
+		if(!StringUtils.isEmpty(str)){
+			sendGoldTimer=Integer.parseInt(str);
+		}
+		return sendGoldTimer;
+	}
+	/**
+	 * 删除房间金币定时计数
+	 * @param roomNo
+	 */
+	public static void delNnRoomSendGoldTimer(String roomNo){
+		RedisUtil.hdel(NnConstans.NN_ROOM_PRE+roomNo, "sendGoldTimer");
+	}
+	
+	
+	public static void main(String[] args) {
+//		 Map<String,HunNnBean.PositionInfo> map=NnUtil.getPositionInfoToMap("200106");
+//		 System.out.println(map);
+		 
+		 int type=NnUtil.getCardTypeDouble(NnCardRuleEnum.NIU_NIU.getCode());
+	}
 	
 	
 }

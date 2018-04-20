@@ -4241,6 +4241,59 @@ public final class HunNnBean {
      * <code>repeated int64 uids = 6;</code>
      */
     long getUids(int index);
+
+    /**
+     * <pre>
+     *盈亏
+     * </pre>
+     *
+     * <code>optional int32 winGold = 7;</code>
+     */
+    int getWinGold();
+
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    java.util.List<com.lhyone.nn.pb.HunNnBean.UserChip> 
+        getUserChipList();
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    com.lhyone.nn.pb.HunNnBean.UserChip getUserChip(int index);
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    int getUserChipCount();
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    java.util.List<? extends com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder> 
+        getUserChipOrBuilderList();
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder getUserChipOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code PositionInfo}
@@ -4259,6 +4312,8 @@ public final class HunNnBean {
       perGold_ = 0;
       listGold_ = java.util.Collections.emptyList();
       uids_ = java.util.Collections.emptyList();
+      winGold_ = 0;
+      userChip_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -4356,6 +4411,20 @@ public final class HunNnBean {
               input.popLimit(limit);
               break;
             }
+            case 56: {
+
+              winGold_ = input.readInt32();
+              break;
+            }
+            case 66: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                userChip_ = new java.util.ArrayList<com.lhyone.nn.pb.HunNnBean.UserChip>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              userChip_.add(
+                  input.readMessage(com.lhyone.nn.pb.HunNnBean.UserChip.parser(), extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -4369,6 +4438,9 @@ public final class HunNnBean {
         }
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           uids_ = java.util.Collections.unmodifiableList(uids_);
+        }
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          userChip_ = java.util.Collections.unmodifiableList(userChip_);
         }
         makeExtensionsImmutable();
       }
@@ -4528,6 +4600,74 @@ public final class HunNnBean {
     }
     private int uidsMemoizedSerializedSize = -1;
 
+    public static final int WINGOLD_FIELD_NUMBER = 7;
+    private int winGold_;
+    /**
+     * <pre>
+     *盈亏
+     * </pre>
+     *
+     * <code>optional int32 winGold = 7;</code>
+     */
+    public int getWinGold() {
+      return winGold_;
+    }
+
+    public static final int USERCHIP_FIELD_NUMBER = 8;
+    private java.util.List<com.lhyone.nn.pb.HunNnBean.UserChip> userChip_;
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    public java.util.List<com.lhyone.nn.pb.HunNnBean.UserChip> getUserChipList() {
+      return userChip_;
+    }
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    public java.util.List<? extends com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder> 
+        getUserChipOrBuilderList() {
+      return userChip_;
+    }
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    public int getUserChipCount() {
+      return userChip_.size();
+    }
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    public com.lhyone.nn.pb.HunNnBean.UserChip getUserChip(int index) {
+      return userChip_.get(index);
+    }
+    /**
+     * <pre>
+     *用户筹码信息
+     * </pre>
+     *
+     * <code>repeated .UserChip userChip = 8;</code>
+     */
+    public com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder getUserChipOrBuilder(
+        int index) {
+      return userChip_.get(index);
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -4566,6 +4706,12 @@ public final class HunNnBean {
       }
       for (int i = 0; i < uids_.size(); i++) {
         output.writeInt64NoTag(uids_.get(i));
+      }
+      if (winGold_ != 0) {
+        output.writeInt32(7, winGold_);
+      }
+      for (int i = 0; i < userChip_.size(); i++) {
+        output.writeMessage(8, userChip_.get(i));
       }
     }
 
@@ -4618,6 +4764,14 @@ public final class HunNnBean {
         }
         uidsMemoizedSerializedSize = dataSize;
       }
+      if (winGold_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, winGold_);
+      }
+      for (int i = 0; i < userChip_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(8, userChip_.get(i));
+      }
       memoizedSize = size;
       return size;
     }
@@ -4649,6 +4803,10 @@ public final class HunNnBean {
           .equals(other.getListGoldList());
       result = result && getUidsList()
           .equals(other.getUidsList());
+      result = result && (getWinGold()
+          == other.getWinGold());
+      result = result && getUserChipList()
+          .equals(other.getUserChipList());
       return result;
     }
 
@@ -4677,6 +4835,12 @@ public final class HunNnBean {
       if (getUidsCount() > 0) {
         hash = (37 * hash) + UIDS_FIELD_NUMBER;
         hash = (53 * hash) + getUidsList().hashCode();
+      }
+      hash = (37 * hash) + WINGOLD_FIELD_NUMBER;
+      hash = (53 * hash) + getWinGold();
+      if (getUserChipCount() > 0) {
+        hash = (37 * hash) + USERCHIP_FIELD_NUMBER;
+        hash = (53 * hash) + getUserChipList().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -4792,6 +4956,7 @@ public final class HunNnBean {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
+          getUserChipFieldBuilder();
         }
       }
       public Builder clear() {
@@ -4812,6 +4977,14 @@ public final class HunNnBean {
         bitField0_ = (bitField0_ & ~0x00000010);
         uids_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000020);
+        winGold_ = 0;
+
+        if (userChipBuilder_ == null) {
+          userChip_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000080);
+        } else {
+          userChipBuilder_.clear();
+        }
         return this;
       }
 
@@ -4854,6 +5027,16 @@ public final class HunNnBean {
           bitField0_ = (bitField0_ & ~0x00000020);
         }
         result.uids_ = uids_;
+        result.winGold_ = winGold_;
+        if (userChipBuilder_ == null) {
+          if (((bitField0_ & 0x00000080) == 0x00000080)) {
+            userChip_ = java.util.Collections.unmodifiableList(userChip_);
+            bitField0_ = (bitField0_ & ~0x00000080);
+          }
+          result.userChip_ = userChip_;
+        } else {
+          result.userChip_ = userChipBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4927,6 +5110,35 @@ public final class HunNnBean {
             uids_.addAll(other.uids_);
           }
           onChanged();
+        }
+        if (other.getWinGold() != 0) {
+          setWinGold(other.getWinGold());
+        }
+        if (userChipBuilder_ == null) {
+          if (!other.userChip_.isEmpty()) {
+            if (userChip_.isEmpty()) {
+              userChip_ = other.userChip_;
+              bitField0_ = (bitField0_ & ~0x00000080);
+            } else {
+              ensureUserChipIsMutable();
+              userChip_.addAll(other.userChip_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.userChip_.isEmpty()) {
+            if (userChipBuilder_.isEmpty()) {
+              userChipBuilder_.dispose();
+              userChipBuilder_ = null;
+              userChip_ = other.userChip_;
+              bitField0_ = (bitField0_ & ~0x00000080);
+              userChipBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getUserChipFieldBuilder() : null;
+            } else {
+              userChipBuilder_.addAllMessages(other.userChip_);
+            }
+          }
         }
         onChanged();
         return this;
@@ -5409,6 +5621,356 @@ public final class HunNnBean {
         onChanged();
         return this;
       }
+
+      private int winGold_ ;
+      /**
+       * <pre>
+       *盈亏
+       * </pre>
+       *
+       * <code>optional int32 winGold = 7;</code>
+       */
+      public int getWinGold() {
+        return winGold_;
+      }
+      /**
+       * <pre>
+       *盈亏
+       * </pre>
+       *
+       * <code>optional int32 winGold = 7;</code>
+       */
+      public Builder setWinGold(int value) {
+        
+        winGold_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *盈亏
+       * </pre>
+       *
+       * <code>optional int32 winGold = 7;</code>
+       */
+      public Builder clearWinGold() {
+        
+        winGold_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<com.lhyone.nn.pb.HunNnBean.UserChip> userChip_ =
+        java.util.Collections.emptyList();
+      private void ensureUserChipIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          userChip_ = new java.util.ArrayList<com.lhyone.nn.pb.HunNnBean.UserChip>(userChip_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.lhyone.nn.pb.HunNnBean.UserChip, com.lhyone.nn.pb.HunNnBean.UserChip.Builder, com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder> userChipBuilder_;
+
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public java.util.List<com.lhyone.nn.pb.HunNnBean.UserChip> getUserChipList() {
+        if (userChipBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(userChip_);
+        } else {
+          return userChipBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public int getUserChipCount() {
+        if (userChipBuilder_ == null) {
+          return userChip_.size();
+        } else {
+          return userChipBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.UserChip getUserChip(int index) {
+        if (userChipBuilder_ == null) {
+          return userChip_.get(index);
+        } else {
+          return userChipBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder setUserChip(
+          int index, com.lhyone.nn.pb.HunNnBean.UserChip value) {
+        if (userChipBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUserChipIsMutable();
+          userChip_.set(index, value);
+          onChanged();
+        } else {
+          userChipBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder setUserChip(
+          int index, com.lhyone.nn.pb.HunNnBean.UserChip.Builder builderForValue) {
+        if (userChipBuilder_ == null) {
+          ensureUserChipIsMutable();
+          userChip_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          userChipBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder addUserChip(com.lhyone.nn.pb.HunNnBean.UserChip value) {
+        if (userChipBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUserChipIsMutable();
+          userChip_.add(value);
+          onChanged();
+        } else {
+          userChipBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder addUserChip(
+          int index, com.lhyone.nn.pb.HunNnBean.UserChip value) {
+        if (userChipBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUserChipIsMutable();
+          userChip_.add(index, value);
+          onChanged();
+        } else {
+          userChipBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder addUserChip(
+          com.lhyone.nn.pb.HunNnBean.UserChip.Builder builderForValue) {
+        if (userChipBuilder_ == null) {
+          ensureUserChipIsMutable();
+          userChip_.add(builderForValue.build());
+          onChanged();
+        } else {
+          userChipBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder addUserChip(
+          int index, com.lhyone.nn.pb.HunNnBean.UserChip.Builder builderForValue) {
+        if (userChipBuilder_ == null) {
+          ensureUserChipIsMutable();
+          userChip_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          userChipBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder addAllUserChip(
+          java.lang.Iterable<? extends com.lhyone.nn.pb.HunNnBean.UserChip> values) {
+        if (userChipBuilder_ == null) {
+          ensureUserChipIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, userChip_);
+          onChanged();
+        } else {
+          userChipBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder clearUserChip() {
+        if (userChipBuilder_ == null) {
+          userChip_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000080);
+          onChanged();
+        } else {
+          userChipBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public Builder removeUserChip(int index) {
+        if (userChipBuilder_ == null) {
+          ensureUserChipIsMutable();
+          userChip_.remove(index);
+          onChanged();
+        } else {
+          userChipBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.UserChip.Builder getUserChipBuilder(
+          int index) {
+        return getUserChipFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder getUserChipOrBuilder(
+          int index) {
+        if (userChipBuilder_ == null) {
+          return userChip_.get(index);  } else {
+          return userChipBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public java.util.List<? extends com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder> 
+           getUserChipOrBuilderList() {
+        if (userChipBuilder_ != null) {
+          return userChipBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(userChip_);
+        }
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.UserChip.Builder addUserChipBuilder() {
+        return getUserChipFieldBuilder().addBuilder(
+            com.lhyone.nn.pb.HunNnBean.UserChip.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.UserChip.Builder addUserChipBuilder(
+          int index) {
+        return getUserChipFieldBuilder().addBuilder(
+            index, com.lhyone.nn.pb.HunNnBean.UserChip.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       *用户筹码信息
+       * </pre>
+       *
+       * <code>repeated .UserChip userChip = 8;</code>
+       */
+      public java.util.List<com.lhyone.nn.pb.HunNnBean.UserChip.Builder> 
+           getUserChipBuilderList() {
+        return getUserChipFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.lhyone.nn.pb.HunNnBean.UserChip, com.lhyone.nn.pb.HunNnBean.UserChip.Builder, com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder> 
+          getUserChipFieldBuilder() {
+        if (userChipBuilder_ == null) {
+          userChipBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              com.lhyone.nn.pb.HunNnBean.UserChip, com.lhyone.nn.pb.HunNnBean.UserChip.Builder, com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder>(
+                  userChip_,
+                  ((bitField0_ & 0x00000080) == 0x00000080),
+                  getParentForChildren(),
+                  isClean());
+          userChip_ = null;
+        }
+        return userChipBuilder_;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -5453,6 +6015,622 @@ public final class HunNnBean {
     }
 
     public com.lhyone.nn.pb.HunNnBean.PositionInfo getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface UserChipOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:UserChip)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     *用户id
+     * </pre>
+     *
+     * <code>optional int64 userId = 1;</code>
+     */
+    long getUserId();
+
+    /**
+     * <pre>
+     *用户金币
+     * </pre>
+     *
+     * <code>optional int32 gold = 2;</code>
+     */
+    int getGold();
+
+    /**
+     * <pre>
+     *盈亏
+     * </pre>
+     *
+     * <code>optional int32 winGold = 4;</code>
+     */
+    int getWinGold();
+  }
+  /**
+   * Protobuf type {@code UserChip}
+   */
+  public  static final class UserChip extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:UserChip)
+      UserChipOrBuilder {
+    // Use UserChip.newBuilder() to construct.
+    private UserChip(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private UserChip() {
+      userId_ = 0L;
+      gold_ = 0;
+      winGold_ = 0;
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
+    private UserChip(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      int mutable_bitField0_ = 0;
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+
+              userId_ = input.readInt64();
+              break;
+            }
+            case 16: {
+
+              gold_ = input.readInt32();
+              break;
+            }
+            case 32: {
+
+              winGold_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.lhyone.nn.pb.HunNnBean.internal_static_UserChip_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.lhyone.nn.pb.HunNnBean.internal_static_UserChip_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.lhyone.nn.pb.HunNnBean.UserChip.class, com.lhyone.nn.pb.HunNnBean.UserChip.Builder.class);
+    }
+
+    public static final int USERID_FIELD_NUMBER = 1;
+    private long userId_;
+    /**
+     * <pre>
+     *用户id
+     * </pre>
+     *
+     * <code>optional int64 userId = 1;</code>
+     */
+    public long getUserId() {
+      return userId_;
+    }
+
+    public static final int GOLD_FIELD_NUMBER = 2;
+    private int gold_;
+    /**
+     * <pre>
+     *用户金币
+     * </pre>
+     *
+     * <code>optional int32 gold = 2;</code>
+     */
+    public int getGold() {
+      return gold_;
+    }
+
+    public static final int WINGOLD_FIELD_NUMBER = 4;
+    private int winGold_;
+    /**
+     * <pre>
+     *盈亏
+     * </pre>
+     *
+     * <code>optional int32 winGold = 4;</code>
+     */
+    public int getWinGold() {
+      return winGold_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (userId_ != 0L) {
+        output.writeInt64(1, userId_);
+      }
+      if (gold_ != 0) {
+        output.writeInt32(2, gold_);
+      }
+      if (winGold_ != 0) {
+        output.writeInt32(4, winGold_);
+      }
+    }
+
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (userId_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, userId_);
+      }
+      if (gold_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, gold_);
+      }
+      if (winGold_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, winGold_);
+      }
+      memoizedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.lhyone.nn.pb.HunNnBean.UserChip)) {
+        return super.equals(obj);
+      }
+      com.lhyone.nn.pb.HunNnBean.UserChip other = (com.lhyone.nn.pb.HunNnBean.UserChip) obj;
+
+      boolean result = true;
+      result = result && (getUserId()
+          == other.getUserId());
+      result = result && (getGold()
+          == other.getGold());
+      result = result && (getWinGold()
+          == other.getWinGold());
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      hash = (37 * hash) + USERID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getUserId());
+      hash = (37 * hash) + GOLD_FIELD_NUMBER;
+      hash = (53 * hash) + getGold();
+      hash = (37 * hash) + WINGOLD_FIELD_NUMBER;
+      hash = (53 * hash) + getWinGold();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.lhyone.nn.pb.HunNnBean.UserChip parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.lhyone.nn.pb.HunNnBean.UserChip prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code UserChip}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:UserChip)
+        com.lhyone.nn.pb.HunNnBean.UserChipOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.lhyone.nn.pb.HunNnBean.internal_static_UserChip_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.lhyone.nn.pb.HunNnBean.internal_static_UserChip_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.lhyone.nn.pb.HunNnBean.UserChip.class, com.lhyone.nn.pb.HunNnBean.UserChip.Builder.class);
+      }
+
+      // Construct using com.lhyone.nn.pb.HunNnBean.UserChip.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      public Builder clear() {
+        super.clear();
+        userId_ = 0L;
+
+        gold_ = 0;
+
+        winGold_ = 0;
+
+        return this;
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.lhyone.nn.pb.HunNnBean.internal_static_UserChip_descriptor;
+      }
+
+      public com.lhyone.nn.pb.HunNnBean.UserChip getDefaultInstanceForType() {
+        return com.lhyone.nn.pb.HunNnBean.UserChip.getDefaultInstance();
+      }
+
+      public com.lhyone.nn.pb.HunNnBean.UserChip build() {
+        com.lhyone.nn.pb.HunNnBean.UserChip result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.lhyone.nn.pb.HunNnBean.UserChip buildPartial() {
+        com.lhyone.nn.pb.HunNnBean.UserChip result = new com.lhyone.nn.pb.HunNnBean.UserChip(this);
+        result.userId_ = userId_;
+        result.gold_ = gold_;
+        result.winGold_ = winGold_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.lhyone.nn.pb.HunNnBean.UserChip) {
+          return mergeFrom((com.lhyone.nn.pb.HunNnBean.UserChip)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.lhyone.nn.pb.HunNnBean.UserChip other) {
+        if (other == com.lhyone.nn.pb.HunNnBean.UserChip.getDefaultInstance()) return this;
+        if (other.getUserId() != 0L) {
+          setUserId(other.getUserId());
+        }
+        if (other.getGold() != 0) {
+          setGold(other.getGold());
+        }
+        if (other.getWinGold() != 0) {
+          setWinGold(other.getWinGold());
+        }
+        onChanged();
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.lhyone.nn.pb.HunNnBean.UserChip parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.lhyone.nn.pb.HunNnBean.UserChip) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long userId_ ;
+      /**
+       * <pre>
+       *用户id
+       * </pre>
+       *
+       * <code>optional int64 userId = 1;</code>
+       */
+      public long getUserId() {
+        return userId_;
+      }
+      /**
+       * <pre>
+       *用户id
+       * </pre>
+       *
+       * <code>optional int64 userId = 1;</code>
+       */
+      public Builder setUserId(long value) {
+        
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *用户id
+       * </pre>
+       *
+       * <code>optional int64 userId = 1;</code>
+       */
+      public Builder clearUserId() {
+        
+        userId_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private int gold_ ;
+      /**
+       * <pre>
+       *用户金币
+       * </pre>
+       *
+       * <code>optional int32 gold = 2;</code>
+       */
+      public int getGold() {
+        return gold_;
+      }
+      /**
+       * <pre>
+       *用户金币
+       * </pre>
+       *
+       * <code>optional int32 gold = 2;</code>
+       */
+      public Builder setGold(int value) {
+        
+        gold_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *用户金币
+       * </pre>
+       *
+       * <code>optional int32 gold = 2;</code>
+       */
+      public Builder clearGold() {
+        
+        gold_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int winGold_ ;
+      /**
+       * <pre>
+       *盈亏
+       * </pre>
+       *
+       * <code>optional int32 winGold = 4;</code>
+       */
+      public int getWinGold() {
+        return winGold_;
+      }
+      /**
+       * <pre>
+       *盈亏
+       * </pre>
+       *
+       * <code>optional int32 winGold = 4;</code>
+       */
+      public Builder setWinGold(int value) {
+        
+        winGold_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *盈亏
+       * </pre>
+       *
+       * <code>optional int32 winGold = 4;</code>
+       */
+      public Builder clearWinGold() {
+        
+        winGold_ = 0;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:UserChip)
+    }
+
+    // @@protoc_insertion_point(class_scope:UserChip)
+    private static final com.lhyone.nn.pb.HunNnBean.UserChip DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.lhyone.nn.pb.HunNnBean.UserChip();
+    }
+
+    public static com.lhyone.nn.pb.HunNnBean.UserChip getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<UserChip>
+        PARSER = new com.google.protobuf.AbstractParser<UserChip>() {
+      public UserChip parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new UserChip(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<UserChip> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<UserChip> getParserForType() {
+      return PARSER;
+    }
+
+    public com.lhyone.nn.pb.HunNnBean.UserChip getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -5693,6 +6871,68 @@ public final class HunNnBean {
      * <code>optional int32 landlordTimes = 19;</code>
      */
     int getLandlordTimes();
+
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    java.util.List<com.lhyone.nn.pb.HunNnBean.PositionInfo> 
+        getUPositionsList();
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    com.lhyone.nn.pb.HunNnBean.PositionInfo getUPositions(int index);
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    int getUPositionsCount();
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    java.util.List<? extends com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder> 
+        getUPositionsOrBuilderList();
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder getUPositionsOrBuilder(
+        int index);
+
+    /**
+     * <pre>
+     *个性签名
+     * </pre>
+     *
+     * <code>optional string mark = 21;</code>
+     */
+    java.lang.String getMark();
+    /**
+     * <pre>
+     *个性签名
+     * </pre>
+     *
+     * <code>optional string mark = 21;</code>
+     */
+    com.google.protobuf.ByteString
+        getMarkBytes();
   }
   /**
    * Protobuf type {@code UserInfo}
@@ -5724,6 +6964,8 @@ public final class HunNnBean {
       redayTime_ = 0L;
       isApplyLandlord_ = 0;
       landlordTimes_ = 0;
+      uPositions_ = java.util.Collections.emptyList();
+      mark_ = "";
     }
 
     @java.lang.Override
@@ -5859,6 +7101,21 @@ public final class HunNnBean {
               landlordTimes_ = input.readInt32();
               break;
             }
+            case 162: {
+              if (!((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+                uPositions_ = new java.util.ArrayList<com.lhyone.nn.pb.HunNnBean.PositionInfo>();
+                mutable_bitField0_ |= 0x00080000;
+              }
+              uPositions_.add(
+                  input.readMessage(com.lhyone.nn.pb.HunNnBean.PositionInfo.parser(), extensionRegistry));
+              break;
+            }
+            case 170: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              mark_ = s;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -5867,6 +7124,9 @@ public final class HunNnBean {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+          uPositions_ = java.util.Collections.unmodifiableList(uPositions_);
+        }
         makeExtensionsImmutable();
       }
     }
@@ -5882,6 +7142,7 @@ public final class HunNnBean {
               com.lhyone.nn.pb.HunNnBean.UserInfo.class, com.lhyone.nn.pb.HunNnBean.UserInfo.Builder.class);
     }
 
+    private int bitField0_;
     public static final int USERID_FIELD_NUMBER = 1;
     private long userId_;
     /**
@@ -6294,6 +7555,103 @@ public final class HunNnBean {
       return landlordTimes_;
     }
 
+    public static final int UPOSITIONS_FIELD_NUMBER = 20;
+    private java.util.List<com.lhyone.nn.pb.HunNnBean.PositionInfo> uPositions_;
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    public java.util.List<com.lhyone.nn.pb.HunNnBean.PositionInfo> getUPositionsList() {
+      return uPositions_;
+    }
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    public java.util.List<? extends com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder> 
+        getUPositionsOrBuilderList() {
+      return uPositions_;
+    }
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    public int getUPositionsCount() {
+      return uPositions_.size();
+    }
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    public com.lhyone.nn.pb.HunNnBean.PositionInfo getUPositions(int index) {
+      return uPositions_.get(index);
+    }
+    /**
+     * <pre>
+     *位置
+     * </pre>
+     *
+     * <code>repeated .PositionInfo uPositions = 20;</code>
+     */
+    public com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder getUPositionsOrBuilder(
+        int index) {
+      return uPositions_.get(index);
+    }
+
+    public static final int MARK_FIELD_NUMBER = 21;
+    private volatile java.lang.Object mark_;
+    /**
+     * <pre>
+     *个性签名
+     * </pre>
+     *
+     * <code>optional string mark = 21;</code>
+     */
+    public java.lang.String getMark() {
+      java.lang.Object ref = mark_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        mark_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *个性签名
+     * </pre>
+     *
+     * <code>optional string mark = 21;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMarkBytes() {
+      java.lang.Object ref = mark_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        mark_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -6362,6 +7720,12 @@ public final class HunNnBean {
       }
       if (landlordTimes_ != 0) {
         output.writeInt32(19, landlordTimes_);
+      }
+      for (int i = 0; i < uPositions_.size(); i++) {
+        output.writeMessage(20, uPositions_.get(i));
+      }
+      if (!getMarkBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 21, mark_);
       }
     }
 
@@ -6441,6 +7805,13 @@ public final class HunNnBean {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(19, landlordTimes_);
       }
+      for (int i = 0; i < uPositions_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(20, uPositions_.get(i));
+      }
+      if (!getMarkBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(21, mark_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -6498,6 +7869,10 @@ public final class HunNnBean {
           == other.getIsApplyLandlord());
       result = result && (getLandlordTimes()
           == other.getLandlordTimes());
+      result = result && getUPositionsList()
+          .equals(other.getUPositionsList());
+      result = result && getMark()
+          .equals(other.getMark());
       return result;
     }
 
@@ -6552,6 +7927,12 @@ public final class HunNnBean {
       hash = (53 * hash) + getIsApplyLandlord();
       hash = (37 * hash) + LANDLORDTIMES_FIELD_NUMBER;
       hash = (53 * hash) + getLandlordTimes();
+      if (getUPositionsCount() > 0) {
+        hash = (37 * hash) + UPOSITIONS_FIELD_NUMBER;
+        hash = (53 * hash) + getUPositionsList().hashCode();
+      }
+      hash = (37 * hash) + MARK_FIELD_NUMBER;
+      hash = (53 * hash) + getMark().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -6666,6 +8047,7 @@ public final class HunNnBean {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
+          getUPositionsFieldBuilder();
         }
       }
       public Builder clear() {
@@ -6712,6 +8094,14 @@ public final class HunNnBean {
 
         landlordTimes_ = 0;
 
+        if (uPositionsBuilder_ == null) {
+          uPositions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00080000);
+        } else {
+          uPositionsBuilder_.clear();
+        }
+        mark_ = "";
+
         return this;
       }
 
@@ -6734,6 +8124,8 @@ public final class HunNnBean {
 
       public com.lhyone.nn.pb.HunNnBean.UserInfo buildPartial() {
         com.lhyone.nn.pb.HunNnBean.UserInfo result = new com.lhyone.nn.pb.HunNnBean.UserInfo(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
         result.userId_ = userId_;
         result.ip_ = ip_;
         result.token_ = token_;
@@ -6757,6 +8149,17 @@ public final class HunNnBean {
         result.redayTime_ = redayTime_;
         result.isApplyLandlord_ = isApplyLandlord_;
         result.landlordTimes_ = landlordTimes_;
+        if (uPositionsBuilder_ == null) {
+          if (((bitField0_ & 0x00080000) == 0x00080000)) {
+            uPositions_ = java.util.Collections.unmodifiableList(uPositions_);
+            bitField0_ = (bitField0_ & ~0x00080000);
+          }
+          result.uPositions_ = uPositions_;
+        } else {
+          result.uPositions_ = uPositionsBuilder_.build();
+        }
+        result.mark_ = mark_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -6860,6 +8263,36 @@ public final class HunNnBean {
         if (other.getLandlordTimes() != 0) {
           setLandlordTimes(other.getLandlordTimes());
         }
+        if (uPositionsBuilder_ == null) {
+          if (!other.uPositions_.isEmpty()) {
+            if (uPositions_.isEmpty()) {
+              uPositions_ = other.uPositions_;
+              bitField0_ = (bitField0_ & ~0x00080000);
+            } else {
+              ensureUPositionsIsMutable();
+              uPositions_.addAll(other.uPositions_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.uPositions_.isEmpty()) {
+            if (uPositionsBuilder_.isEmpty()) {
+              uPositionsBuilder_.dispose();
+              uPositionsBuilder_ = null;
+              uPositions_ = other.uPositions_;
+              bitField0_ = (bitField0_ & ~0x00080000);
+              uPositionsBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getUPositionsFieldBuilder() : null;
+            } else {
+              uPositionsBuilder_.addAllMessages(other.uPositions_);
+            }
+          }
+        }
+        if (!other.getMark().isEmpty()) {
+          mark_ = other.mark_;
+          onChanged();
+        }
         onChanged();
         return this;
       }
@@ -6885,6 +8318,7 @@ public final class HunNnBean {
         }
         return this;
       }
+      private int bitField0_;
 
       private long userId_ ;
       /**
@@ -7977,6 +9411,407 @@ public final class HunNnBean {
         onChanged();
         return this;
       }
+
+      private java.util.List<com.lhyone.nn.pb.HunNnBean.PositionInfo> uPositions_ =
+        java.util.Collections.emptyList();
+      private void ensureUPositionsIsMutable() {
+        if (!((bitField0_ & 0x00080000) == 0x00080000)) {
+          uPositions_ = new java.util.ArrayList<com.lhyone.nn.pb.HunNnBean.PositionInfo>(uPositions_);
+          bitField0_ |= 0x00080000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.lhyone.nn.pb.HunNnBean.PositionInfo, com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder, com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder> uPositionsBuilder_;
+
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public java.util.List<com.lhyone.nn.pb.HunNnBean.PositionInfo> getUPositionsList() {
+        if (uPositionsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(uPositions_);
+        } else {
+          return uPositionsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public int getUPositionsCount() {
+        if (uPositionsBuilder_ == null) {
+          return uPositions_.size();
+        } else {
+          return uPositionsBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.PositionInfo getUPositions(int index) {
+        if (uPositionsBuilder_ == null) {
+          return uPositions_.get(index);
+        } else {
+          return uPositionsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder setUPositions(
+          int index, com.lhyone.nn.pb.HunNnBean.PositionInfo value) {
+        if (uPositionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUPositionsIsMutable();
+          uPositions_.set(index, value);
+          onChanged();
+        } else {
+          uPositionsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder setUPositions(
+          int index, com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder builderForValue) {
+        if (uPositionsBuilder_ == null) {
+          ensureUPositionsIsMutable();
+          uPositions_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          uPositionsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder addUPositions(com.lhyone.nn.pb.HunNnBean.PositionInfo value) {
+        if (uPositionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUPositionsIsMutable();
+          uPositions_.add(value);
+          onChanged();
+        } else {
+          uPositionsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder addUPositions(
+          int index, com.lhyone.nn.pb.HunNnBean.PositionInfo value) {
+        if (uPositionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUPositionsIsMutable();
+          uPositions_.add(index, value);
+          onChanged();
+        } else {
+          uPositionsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder addUPositions(
+          com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder builderForValue) {
+        if (uPositionsBuilder_ == null) {
+          ensureUPositionsIsMutable();
+          uPositions_.add(builderForValue.build());
+          onChanged();
+        } else {
+          uPositionsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder addUPositions(
+          int index, com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder builderForValue) {
+        if (uPositionsBuilder_ == null) {
+          ensureUPositionsIsMutable();
+          uPositions_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          uPositionsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder addAllUPositions(
+          java.lang.Iterable<? extends com.lhyone.nn.pb.HunNnBean.PositionInfo> values) {
+        if (uPositionsBuilder_ == null) {
+          ensureUPositionsIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, uPositions_);
+          onChanged();
+        } else {
+          uPositionsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder clearUPositions() {
+        if (uPositionsBuilder_ == null) {
+          uPositions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00080000);
+          onChanged();
+        } else {
+          uPositionsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public Builder removeUPositions(int index) {
+        if (uPositionsBuilder_ == null) {
+          ensureUPositionsIsMutable();
+          uPositions_.remove(index);
+          onChanged();
+        } else {
+          uPositionsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder getUPositionsBuilder(
+          int index) {
+        return getUPositionsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder getUPositionsOrBuilder(
+          int index) {
+        if (uPositionsBuilder_ == null) {
+          return uPositions_.get(index);  } else {
+          return uPositionsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public java.util.List<? extends com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder> 
+           getUPositionsOrBuilderList() {
+        if (uPositionsBuilder_ != null) {
+          return uPositionsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(uPositions_);
+        }
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder addUPositionsBuilder() {
+        return getUPositionsFieldBuilder().addBuilder(
+            com.lhyone.nn.pb.HunNnBean.PositionInfo.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder addUPositionsBuilder(
+          int index) {
+        return getUPositionsFieldBuilder().addBuilder(
+            index, com.lhyone.nn.pb.HunNnBean.PositionInfo.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       *位置
+       * </pre>
+       *
+       * <code>repeated .PositionInfo uPositions = 20;</code>
+       */
+      public java.util.List<com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder> 
+           getUPositionsBuilderList() {
+        return getUPositionsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          com.lhyone.nn.pb.HunNnBean.PositionInfo, com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder, com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder> 
+          getUPositionsFieldBuilder() {
+        if (uPositionsBuilder_ == null) {
+          uPositionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              com.lhyone.nn.pb.HunNnBean.PositionInfo, com.lhyone.nn.pb.HunNnBean.PositionInfo.Builder, com.lhyone.nn.pb.HunNnBean.PositionInfoOrBuilder>(
+                  uPositions_,
+                  ((bitField0_ & 0x00080000) == 0x00080000),
+                  getParentForChildren(),
+                  isClean());
+          uPositions_ = null;
+        }
+        return uPositionsBuilder_;
+      }
+
+      private java.lang.Object mark_ = "";
+      /**
+       * <pre>
+       *个性签名
+       * </pre>
+       *
+       * <code>optional string mark = 21;</code>
+       */
+      public java.lang.String getMark() {
+        java.lang.Object ref = mark_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          mark_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *个性签名
+       * </pre>
+       *
+       * <code>optional string mark = 21;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMarkBytes() {
+        java.lang.Object ref = mark_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          mark_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *个性签名
+       * </pre>
+       *
+       * <code>optional string mark = 21;</code>
+       */
+      public Builder setMark(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        mark_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *个性签名
+       * </pre>
+       *
+       * <code>optional string mark = 21;</code>
+       */
+      public Builder clearMark() {
+        
+        mark_ = getDefaultInstance().getMark();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *个性签名
+       * </pre>
+       *
+       * <code>optional string mark = 21;</code>
+       */
+      public Builder setMarkBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        mark_ = value;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -8154,6 +9989,33 @@ public final class HunNnBean {
      * <code>optional int32 costGold = 9;</code>
      */
     int getCostGold();
+
+    /**
+     * <pre>
+     *当前连庄次数
+     * </pre>
+     *
+     * <code>optional int32 curLandlordTimes = 10;</code>
+     */
+    int getCurLandlordTimes();
+
+    /**
+     * <pre>
+     *最大连庄次数
+     * </pre>
+     *
+     * <code>optional int32 maxLandlordTimes = 11;</code>
+     */
+    int getMaxLandlordTimes();
+
+    /**
+     * <pre>
+     *庄家最小申请金币
+     * </pre>
+     *
+     * <code>optional int32 minLandlordGold = 12;</code>
+     */
+    int getMinLandlordGold();
   }
   /**
    * Protobuf type {@code RoomInfo}
@@ -8176,6 +10038,9 @@ public final class HunNnBean {
       roomCurMatchStatus_ = 0;
       minGold_ = 0;
       costGold_ = 0;
+      curLandlordTimes_ = 0;
+      maxLandlordTimes_ = 0;
+      minLandlordGold_ = 0;
     }
 
     @java.lang.Override
@@ -8251,6 +10116,21 @@ public final class HunNnBean {
             case 72: {
 
               costGold_ = input.readInt32();
+              break;
+            }
+            case 80: {
+
+              curLandlordTimes_ = input.readInt32();
+              break;
+            }
+            case 88: {
+
+              maxLandlordTimes_ = input.readInt32();
+              break;
+            }
+            case 96: {
+
+              minLandlordGold_ = input.readInt32();
               break;
             }
           }
@@ -8468,6 +10348,45 @@ public final class HunNnBean {
       return costGold_;
     }
 
+    public static final int CURLANDLORDTIMES_FIELD_NUMBER = 10;
+    private int curLandlordTimes_;
+    /**
+     * <pre>
+     *当前连庄次数
+     * </pre>
+     *
+     * <code>optional int32 curLandlordTimes = 10;</code>
+     */
+    public int getCurLandlordTimes() {
+      return curLandlordTimes_;
+    }
+
+    public static final int MAXLANDLORDTIMES_FIELD_NUMBER = 11;
+    private int maxLandlordTimes_;
+    /**
+     * <pre>
+     *最大连庄次数
+     * </pre>
+     *
+     * <code>optional int32 maxLandlordTimes = 11;</code>
+     */
+    public int getMaxLandlordTimes() {
+      return maxLandlordTimes_;
+    }
+
+    public static final int MINLANDLORDGOLD_FIELD_NUMBER = 12;
+    private int minLandlordGold_;
+    /**
+     * <pre>
+     *庄家最小申请金币
+     * </pre>
+     *
+     * <code>optional int32 minLandlordGold = 12;</code>
+     */
+    public int getMinLandlordGold() {
+      return minLandlordGold_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -8506,6 +10425,15 @@ public final class HunNnBean {
       }
       if (costGold_ != 0) {
         output.writeInt32(9, costGold_);
+      }
+      if (curLandlordTimes_ != 0) {
+        output.writeInt32(10, curLandlordTimes_);
+      }
+      if (maxLandlordTimes_ != 0) {
+        output.writeInt32(11, maxLandlordTimes_);
+      }
+      if (minLandlordGold_ != 0) {
+        output.writeInt32(12, minLandlordGold_);
       }
     }
 
@@ -8549,6 +10477,18 @@ public final class HunNnBean {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(9, costGold_);
       }
+      if (curLandlordTimes_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, curLandlordTimes_);
+      }
+      if (maxLandlordTimes_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(11, maxLandlordTimes_);
+      }
+      if (minLandlordGold_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, minLandlordGold_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -8583,6 +10523,12 @@ public final class HunNnBean {
           == other.getMinGold());
       result = result && (getCostGold()
           == other.getCostGold());
+      result = result && (getCurLandlordTimes()
+          == other.getCurLandlordTimes());
+      result = result && (getMaxLandlordTimes()
+          == other.getMaxLandlordTimes());
+      result = result && (getMinLandlordGold()
+          == other.getMinLandlordGold());
       return result;
     }
 
@@ -8613,6 +10559,12 @@ public final class HunNnBean {
       hash = (53 * hash) + getMinGold();
       hash = (37 * hash) + COSTGOLD_FIELD_NUMBER;
       hash = (53 * hash) + getCostGold();
+      hash = (37 * hash) + CURLANDLORDTIMES_FIELD_NUMBER;
+      hash = (53 * hash) + getCurLandlordTimes();
+      hash = (37 * hash) + MAXLANDLORDTIMES_FIELD_NUMBER;
+      hash = (53 * hash) + getMaxLandlordTimes();
+      hash = (37 * hash) + MINLANDLORDGOLD_FIELD_NUMBER;
+      hash = (53 * hash) + getMinLandlordGold();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -8754,6 +10706,12 @@ public final class HunNnBean {
 
         costGold_ = 0;
 
+        curLandlordTimes_ = 0;
+
+        maxLandlordTimes_ = 0;
+
+        minLandlordGold_ = 0;
+
         return this;
       }
 
@@ -8795,6 +10753,9 @@ public final class HunNnBean {
         result.roomCurMatchStatus_ = roomCurMatchStatus_;
         result.minGold_ = minGold_;
         result.costGold_ = costGold_;
+        result.curLandlordTimes_ = curLandlordTimes_;
+        result.maxLandlordTimes_ = maxLandlordTimes_;
+        result.minLandlordGold_ = minLandlordGold_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -8887,6 +10848,15 @@ public final class HunNnBean {
         }
         if (other.getCostGold() != 0) {
           setCostGold(other.getCostGold());
+        }
+        if (other.getCurLandlordTimes() != 0) {
+          setCurLandlordTimes(other.getCurLandlordTimes());
+        }
+        if (other.getMaxLandlordTimes() != 0) {
+          setMaxLandlordTimes(other.getMaxLandlordTimes());
+        }
+        if (other.getMinLandlordGold() != 0) {
+          setMinLandlordGold(other.getMinLandlordGold());
         }
         onChanged();
         return this;
@@ -9581,6 +11551,120 @@ public final class HunNnBean {
         onChanged();
         return this;
       }
+
+      private int curLandlordTimes_ ;
+      /**
+       * <pre>
+       *当前连庄次数
+       * </pre>
+       *
+       * <code>optional int32 curLandlordTimes = 10;</code>
+       */
+      public int getCurLandlordTimes() {
+        return curLandlordTimes_;
+      }
+      /**
+       * <pre>
+       *当前连庄次数
+       * </pre>
+       *
+       * <code>optional int32 curLandlordTimes = 10;</code>
+       */
+      public Builder setCurLandlordTimes(int value) {
+        
+        curLandlordTimes_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *当前连庄次数
+       * </pre>
+       *
+       * <code>optional int32 curLandlordTimes = 10;</code>
+       */
+      public Builder clearCurLandlordTimes() {
+        
+        curLandlordTimes_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int maxLandlordTimes_ ;
+      /**
+       * <pre>
+       *最大连庄次数
+       * </pre>
+       *
+       * <code>optional int32 maxLandlordTimes = 11;</code>
+       */
+      public int getMaxLandlordTimes() {
+        return maxLandlordTimes_;
+      }
+      /**
+       * <pre>
+       *最大连庄次数
+       * </pre>
+       *
+       * <code>optional int32 maxLandlordTimes = 11;</code>
+       */
+      public Builder setMaxLandlordTimes(int value) {
+        
+        maxLandlordTimes_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *最大连庄次数
+       * </pre>
+       *
+       * <code>optional int32 maxLandlordTimes = 11;</code>
+       */
+      public Builder clearMaxLandlordTimes() {
+        
+        maxLandlordTimes_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int minLandlordGold_ ;
+      /**
+       * <pre>
+       *庄家最小申请金币
+       * </pre>
+       *
+       * <code>optional int32 minLandlordGold = 12;</code>
+       */
+      public int getMinLandlordGold() {
+        return minLandlordGold_;
+      }
+      /**
+       * <pre>
+       *庄家最小申请金币
+       * </pre>
+       *
+       * <code>optional int32 minLandlordGold = 12;</code>
+       */
+      public Builder setMinLandlordGold(int value) {
+        
+        minLandlordGold_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *庄家最小申请金币
+       * </pre>
+       *
+       * <code>optional int32 minLandlordGold = 12;</code>
+       */
+      public Builder clearMinLandlordGold() {
+        
+        minLandlordGold_ = 0;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -9655,6 +11739,15 @@ public final class HunNnBean {
      * <code>optional int32 cardType = 2;</code>
      */
     int getCardType();
+
+    /**
+     * <pre>
+     *倍数
+     * </pre>
+     *
+     * <code>optional int32 cardDouble = 3;</code>
+     */
+    int getCardDouble();
   }
   /**
    * Protobuf type {@code CardInfo}
@@ -9670,6 +11763,7 @@ public final class HunNnBean {
     private CardInfo() {
       num_ = java.util.Collections.emptyList();
       cardType_ = 0;
+      cardDouble_ = 0;
     }
 
     @java.lang.Override
@@ -9721,6 +11815,11 @@ public final class HunNnBean {
             case 16: {
 
               cardType_ = input.readInt32();
+              break;
+            }
+            case 24: {
+
+              cardDouble_ = input.readInt32();
               break;
             }
           }
@@ -9786,6 +11885,19 @@ public final class HunNnBean {
       return cardType_;
     }
 
+    public static final int CARDDOUBLE_FIELD_NUMBER = 3;
+    private int cardDouble_;
+    /**
+     * <pre>
+     *倍数
+     * </pre>
+     *
+     * <code>optional int32 cardDouble = 3;</code>
+     */
+    public int getCardDouble() {
+      return cardDouble_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -9808,6 +11920,9 @@ public final class HunNnBean {
       }
       if (cardType_ != 0) {
         output.writeInt32(2, cardType_);
+      }
+      if (cardDouble_ != 0) {
+        output.writeInt32(3, cardDouble_);
       }
     }
 
@@ -9834,6 +11949,10 @@ public final class HunNnBean {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, cardType_);
       }
+      if (cardDouble_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, cardDouble_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -9854,6 +11973,8 @@ public final class HunNnBean {
           .equals(other.getNumList());
       result = result && (getCardType()
           == other.getCardType());
+      result = result && (getCardDouble()
+          == other.getCardDouble());
       return result;
     }
 
@@ -9870,6 +11991,8 @@ public final class HunNnBean {
       }
       hash = (37 * hash) + CARDTYPE_FIELD_NUMBER;
       hash = (53 * hash) + getCardType();
+      hash = (37 * hash) + CARDDOUBLE_FIELD_NUMBER;
+      hash = (53 * hash) + getCardDouble();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -9992,6 +12115,8 @@ public final class HunNnBean {
         bitField0_ = (bitField0_ & ~0x00000001);
         cardType_ = 0;
 
+        cardDouble_ = 0;
+
         return this;
       }
 
@@ -10022,6 +12147,7 @@ public final class HunNnBean {
         }
         result.num_ = num_;
         result.cardType_ = cardType_;
+        result.cardDouble_ = cardDouble_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -10076,6 +12202,9 @@ public final class HunNnBean {
         }
         if (other.getCardType() != 0) {
           setCardType(other.getCardType());
+        }
+        if (other.getCardDouble() != 0) {
+          setCardDouble(other.getCardDouble());
         }
         onChanged();
         return this;
@@ -10204,6 +12333,44 @@ public final class HunNnBean {
       public Builder clearCardType() {
         
         cardType_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int cardDouble_ ;
+      /**
+       * <pre>
+       *倍数
+       * </pre>
+       *
+       * <code>optional int32 cardDouble = 3;</code>
+       */
+      public int getCardDouble() {
+        return cardDouble_;
+      }
+      /**
+       * <pre>
+       *倍数
+       * </pre>
+       *
+       * <code>optional int32 cardDouble = 3;</code>
+       */
+      public Builder setCardDouble(int value) {
+        
+        cardDouble_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *倍数
+       * </pre>
+       *
+       * <code>optional int32 cardDouble = 3;</code>
+       */
+      public Builder clearCardDouble() {
+        
+        cardDouble_ = 0;
         onChanged();
         return this;
       }
@@ -10809,6 +12976,11 @@ public final class HunNnBean {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_PositionInfo_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_UserChip_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_UserChip_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_UserInfo_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -10847,29 +13019,35 @@ public final class HunNnBean {
       "nfo\022\027\n\004room\030\002 \001(\0132\t.RoomInfo\022\020\n\010serverId" +
       "\030\003 \001(\005\022\025\n\rcurRoomStatus\030\004 \001(\005\022\020\n\010restTim" +
       "e\030\005 \001(\005\022\037\n\010position\030\006 \003(\0132\r.PositionInfo",
-      "\022\033\n\010landlord\030\007 \001(\0132\t.UserInfo\"}\n\014Positio" +
-      "nInfo\022\020\n\010position\030\001 \001(\005\022\027\n\004card\030\002 \001(\0132\t." +
-      "CardInfo\022\021\n\ttotalGold\030\003 \001(\003\022\017\n\007perGold\030\004" +
-      " \001(\005\022\020\n\010listGold\030\005 \003(\005\022\014\n\004uids\030\006 \003(\003\"\344\002\n" +
-      "\010UserInfo\022\016\n\006userId\030\001 \001(\003\022\n\n\002ip\030\002 \001(\t\022\r\n" +
-      "\005token\030\003 \001(\t\022\020\n\010nickName\030\004 \001(\t\022\017\n\007headUr" +
-      "l\030\005 \001(\t\022\016\n\006gender\030\006 \001(\005\022\022\n\nplayerType\030\007 " +
-      "\001(\005\022\020\n\010position\030\010 \001(\005\022\016\n\006roomNo\030\t \001(\t\022\027\n" +
-      "\004card\030\n \001(\0132\t.CardInfo\022\017\n\007perGold\030\013 \001(\005\022" +
-      "\020\n\010baseGold\030\014 \001(\005\022\017\n\007winGold\030\r \001(\005\022\021\n\tto",
-      "talGold\030\016 \001(\003\022\020\n\010userGold\030\017 \001(\003\022\017\n\007isRed" +
-      "ay\030\020 \001(\005\022\021\n\tredayTime\030\021 \001(\003\022\027\n\017isApplyLa" +
-      "ndlord\030\022 \001(\005\022\025\n\rlandlordTimes\030\023 \001(\005\"\350\001\n\010" +
-      "RoomInfo\022\016\n\006roomNo\030\001 \001(\t\022\032\n\022roomMaxPerso" +
-      "nCount\030\002 \001(\005\022\032\n\022roomCurPersonCount\030\003 \001(\005" +
-      "\022\031\n\021roomCurMatchCount\030\004 \001(\005\022#\n\ncardDoubl" +
-      "e\030\005 \003(\0132\017.CardTypeDouble\022\025\n\rroomCurStatu" +
-      "s\030\006 \001(\005\022\032\n\022roomCurMatchStatus\030\007 \001(\005\022\017\n\007m" +
-      "inGold\030\010 \001(\005\022\020\n\010costGold\030\t \001(\005\")\n\010CardIn" +
-      "fo\022\013\n\003num\030\001 \003(\005\022\020\n\010cardType\030\002 \001(\005\"6\n\016Car",
-      "dTypeDouble\022\020\n\010cardType\030\001 \001(\005\022\022\n\ncardDou" +
-      "ble\030\002 \001(\005B\035\n\020com.lhyone.nn.pbB\tHunNnBean" +
-      "b\006proto3"
+      "\022\033\n\010landlord\030\007 \001(\0132\t.UserInfo\"\253\001\n\014Positi" +
+      "onInfo\022\020\n\010position\030\001 \001(\005\022\027\n\004card\030\002 \001(\0132\t" +
+      ".CardInfo\022\021\n\ttotalGold\030\003 \001(\003\022\017\n\007perGold\030" +
+      "\004 \001(\005\022\020\n\010listGold\030\005 \003(\005\022\014\n\004uids\030\006 \003(\003\022\017\n" +
+      "\007winGold\030\007 \001(\005\022\033\n\010userChip\030\010 \003(\0132\t.UserC" +
+      "hip\"9\n\010UserChip\022\016\n\006userId\030\001 \001(\003\022\014\n\004gold\030" +
+      "\002 \001(\005\022\017\n\007winGold\030\004 \001(\005\"\225\003\n\010UserInfo\022\016\n\006u" +
+      "serId\030\001 \001(\003\022\n\n\002ip\030\002 \001(\t\022\r\n\005token\030\003 \001(\t\022\020" +
+      "\n\010nickName\030\004 \001(\t\022\017\n\007headUrl\030\005 \001(\t\022\016\n\006gen" +
+      "der\030\006 \001(\005\022\022\n\nplayerType\030\007 \001(\005\022\020\n\010positio",
+      "n\030\010 \001(\005\022\016\n\006roomNo\030\t \001(\t\022\027\n\004card\030\n \001(\0132\t." +
+      "CardInfo\022\017\n\007perGold\030\013 \001(\005\022\020\n\010baseGold\030\014 " +
+      "\001(\005\022\017\n\007winGold\030\r \001(\005\022\021\n\ttotalGold\030\016 \001(\003\022" +
+      "\020\n\010userGold\030\017 \001(\003\022\017\n\007isReday\030\020 \001(\005\022\021\n\tre" +
+      "dayTime\030\021 \001(\003\022\027\n\017isApplyLandlord\030\022 \001(\005\022\025" +
+      "\n\rlandlordTimes\030\023 \001(\005\022!\n\nuPositions\030\024 \003(" +
+      "\0132\r.PositionInfo\022\014\n\004mark\030\025 \001(\t\"\265\002\n\010RoomI" +
+      "nfo\022\016\n\006roomNo\030\001 \001(\t\022\032\n\022roomMaxPersonCoun" +
+      "t\030\002 \001(\005\022\032\n\022roomCurPersonCount\030\003 \001(\005\022\031\n\021r" +
+      "oomCurMatchCount\030\004 \001(\005\022#\n\ncardDouble\030\005 \003",
+      "(\0132\017.CardTypeDouble\022\025\n\rroomCurStatus\030\006 \001" +
+      "(\005\022\032\n\022roomCurMatchStatus\030\007 \001(\005\022\017\n\007minGol" +
+      "d\030\010 \001(\005\022\020\n\010costGold\030\t \001(\005\022\030\n\020curLandlord" +
+      "Times\030\n \001(\005\022\030\n\020maxLandlordTimes\030\013 \001(\005\022\027\n" +
+      "\017minLandlordGold\030\014 \001(\005\"=\n\010CardInfo\022\013\n\003nu" +
+      "m\030\001 \003(\005\022\020\n\010cardType\030\002 \001(\005\022\022\n\ncardDouble\030" +
+      "\003 \001(\005\"6\n\016CardTypeDouble\022\020\n\010cardType\030\001 \001(" +
+      "\005\022\022\n\ncardDouble\030\002 \001(\005B\035\n\020com.lhyone.nn.p" +
+      "bB\tHunNnBeanb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -10906,27 +13084,33 @@ public final class HunNnBean {
     internal_static_PositionInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PositionInfo_descriptor,
-        new java.lang.String[] { "Position", "Card", "TotalGold", "PerGold", "ListGold", "Uids", });
-    internal_static_UserInfo_descriptor =
+        new java.lang.String[] { "Position", "Card", "TotalGold", "PerGold", "ListGold", "Uids", "WinGold", "UserChip", });
+    internal_static_UserChip_descriptor =
       getDescriptor().getMessageTypes().get(4);
+    internal_static_UserChip_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_UserChip_descriptor,
+        new java.lang.String[] { "UserId", "Gold", "WinGold", });
+    internal_static_UserInfo_descriptor =
+      getDescriptor().getMessageTypes().get(5);
     internal_static_UserInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UserInfo_descriptor,
-        new java.lang.String[] { "UserId", "Ip", "Token", "NickName", "HeadUrl", "Gender", "PlayerType", "Position", "RoomNo", "Card", "PerGold", "BaseGold", "WinGold", "TotalGold", "UserGold", "IsReday", "RedayTime", "IsApplyLandlord", "LandlordTimes", });
+        new java.lang.String[] { "UserId", "Ip", "Token", "NickName", "HeadUrl", "Gender", "PlayerType", "Position", "RoomNo", "Card", "PerGold", "BaseGold", "WinGold", "TotalGold", "UserGold", "IsReday", "RedayTime", "IsApplyLandlord", "LandlordTimes", "UPositions", "Mark", });
     internal_static_RoomInfo_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_RoomInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RoomInfo_descriptor,
-        new java.lang.String[] { "RoomNo", "RoomMaxPersonCount", "RoomCurPersonCount", "RoomCurMatchCount", "CardDouble", "RoomCurStatus", "RoomCurMatchStatus", "MinGold", "CostGold", });
+        new java.lang.String[] { "RoomNo", "RoomMaxPersonCount", "RoomCurPersonCount", "RoomCurMatchCount", "CardDouble", "RoomCurStatus", "RoomCurMatchStatus", "MinGold", "CostGold", "CurLandlordTimes", "MaxLandlordTimes", "MinLandlordGold", });
     internal_static_CardInfo_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_CardInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CardInfo_descriptor,
-        new java.lang.String[] { "Num", "CardType", });
+        new java.lang.String[] { "Num", "CardType", "CardDouble", });
     internal_static_CardTypeDouble_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_CardTypeDouble_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_CardTypeDouble_descriptor,

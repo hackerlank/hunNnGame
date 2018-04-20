@@ -3,13 +3,11 @@ package com.lhyone.nn.util;
 public class NnConstans {
 	
 	/**庄家准备倒计时*/
-	public final static int USER_REDAY_TIME=5;
+	public final static int USER_REDAY_IDLE_TIME=5;
 	/**打牌时间*/
-	public final static int PLAY_GAME_TIME=10;
+	public final static int PLAY_GAME_TIME=15;
 	/**展示比赛结果时间*/
 	public final static int SHOW_MATCH_RESULT_TIME=10;
-	/**空闲时间*/
-	public final static int GAME_IDLE_TIME=3;
 	/**牛牛渠道*/
 	public final static String NN_CHANNEL_PRE="hun_nn_channel:";
 	/**牛牛用户*/
@@ -68,6 +66,9 @@ public class NnConstans {
 	
 	/**连庄次数*/
 	public static final int NN_LANDLORD_TIMES=10;
+	
+	/**系统当前时间*/
+	public static final String NN_SYS_CUR_TIME_CACHE="sys_cur_time";
 	
 	
 }

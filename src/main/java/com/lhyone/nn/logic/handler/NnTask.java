@@ -78,6 +78,7 @@ public class NnTask implements Runnable {
 	        	HunNnManager.exitRoom(reqMsg,ctx);
 	       }
     	} catch (Exception e) {
+    		e.printStackTrace();
 		}
         
     }
@@ -91,15 +92,17 @@ public class NnTask implements Runnable {
 	private static boolean checkIsRepeatCommit(long userId,long timestamp){
 
 		boolean flag=RedisUtil.hexists(NnConstans.NN_USER_THREAD_LOCK_CACHE_PRE, userId+"");
-		
-		if(!flag)
-			return true;
-		
-		String orgTimestamp=RedisUtil.hget(NnConstans.NN_USER_THREAD_LOCK_CACHE_PRE, userId+"");
-		if(timestamp>=Long.parseLong(orgTimestamp)){
-			RedisUtil.hset(NnConstans.NN_USER_THREAD_LOCK_CACHE_PRE, userId+"", System.currentTimeMillis()+"");
-			return true;
-		}
-		return false;
+		return true;
+//		if(!flag){
+//			RedisUtil.hset(NnConstans.NN_USER_THREAD_LOCK_CACHE_PRE, userId+"", System.currentTimeMillis()+"");
+//			return true;
+//		}
+//		
+//		String orgTimestamp=RedisUtil.hget(NnConstans.NN_USER_THREAD_LOCK_CACHE_PRE, userId+"");
+//		if(timestamp>=Long.parseLong(orgTimestamp)){
+//			RedisUtil.hset(NnConstans.NN_USER_THREAD_LOCK_CACHE_PRE, userId+"", System.currentTimeMillis()+"");
+//			return true;
+//		}
+//		return false;
 	}
 }

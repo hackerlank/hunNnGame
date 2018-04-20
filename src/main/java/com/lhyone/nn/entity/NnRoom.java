@@ -13,7 +13,7 @@ public class NnRoom implements Serializable {
 	/**主键**/
 	private Long id;
 
-	/**房间类型[1.趣味牛牛 2.8人牛牛]**/
+	/**房间类型[1.牛牛 2.百人牛牛 ]**/
 	private Integer roomType;
 
 	/**创建人id**/
@@ -46,8 +46,11 @@ public class NnRoom implements Serializable {
 	/**房间翻倍规则**/
 	private String roomDoubleRule;
 
-	/**金币下限**/
-	private Integer limitGold;
+	/**进房金币下限**/
+	private Long inLimitGold;
+
+	/**离开房间最低金币下限**/
+	private Long outLimitGold;
 
 	/**消耗金币**/
 	private java.math.BigDecimal costGold;
@@ -57,6 +60,9 @@ public class NnRoom implements Serializable {
 
 	/**是否展示**/
 	private Integer isShow;
+
+	/**最大连庄次数**/
+	private Integer maxLandlordTimes;
 
 	/**创建时间**/
 	private java.util.Date createDate;
@@ -162,12 +168,20 @@ public class NnRoom implements Serializable {
 		return this.roomDoubleRule;
 	}
 
-	public void setLimitGold(Integer limitGold){
-		this.limitGold = limitGold;
+	public void setInLimitGold(Long inLimitGold){
+		this.inLimitGold = inLimitGold;
 	}
 
-	public Integer getLimitGold(){
-		return this.limitGold;
+	public Long getInLimitGold(){
+		return this.inLimitGold;
+	}
+
+	public void setOutLimitGold(Long outLimitGold){
+		this.outLimitGold = outLimitGold;
+	}
+
+	public Long getOutLimitGold(){
+		return this.outLimitGold;
 	}
 
 	public void setCostGold(java.math.BigDecimal costGold){
@@ -192,6 +206,14 @@ public class NnRoom implements Serializable {
 
 	public Integer getIsShow(){
 		return this.isShow;
+	}
+
+	public void setMaxLandlordTimes(Integer maxLandlordTimes){
+		this.maxLandlordTimes = maxLandlordTimes;
+	}
+
+	public Integer getMaxLandlordTimes(){
+		return this.maxLandlordTimes;
 	}
 
 	public void setCreateDate(java.util.Date createDate){

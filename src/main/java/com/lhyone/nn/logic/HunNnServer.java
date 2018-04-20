@@ -1,6 +1,7 @@
 package com.lhyone.nn.logic;
 
 import com.lhyone.nn.enums.RedisMQEnum;
+import com.lhyone.nn.logic.handler.DataInit;
 import com.lhyone.nn.logic.handler.NnDealHandler;
 import com.lhyone.nn.logic.handler.RedisSubMQThread;
 import com.lhyone.nn.pb.HunNnBean;
@@ -24,13 +25,19 @@ import io.netty.util.internal.logging.Log4J2LoggerFactory;
 /**
  * Created by Think on 2017/8/30.
  */
-public class NnServer {
+public class HunNnServer {
     public static void main(String[] args)  throws Exception{
+    	run(9002);
+    }
+    
+    public static void run(int port)  throws Exception{
+
     	InternalLoggerFactory.setDefaultFactory(new Log4J2LoggerFactory());
     	new RedisSubMQThread(RedisMQEnum.CLOSE_ROOM_CHANNEL.getCode()).start();
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try{
+        	DataInit.dataInit(port);
             System.out.println("服务已启动");
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup,workerGroup)
@@ -52,12 +59,13 @@ public class NnServer {
 //                            socketChannel.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                         }
                     });
-            ChannelFuture f = b.bind(9002).sync();
+            ChannelFuture f = b.bind(port).sync();
             f.channel().closeFuture().sync();
         }finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    	
     }
     
 }

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.lhyone.nn.enums.RedisMQEnum;
+import com.lhyone.util.RedisUtil;
 
 import redis.clients.jedis.JedisPubSub;
 
@@ -46,6 +47,9 @@ public class RedisMQListener extends JedisPubSub {
 		try{
 			//如果是剔除房间用户
 			if(RedisMQEnum.CLOSE_ROOM_CHANNEL.getCode().equals(channel)){
+				HunNnManager.colseRoom(message);
+			}
+			if("test_1234_1234".equals(channel)){
 				HunNnManager.colseRoom(message);
 			}
 		}catch(Exception e){
