@@ -31,6 +31,9 @@ public class NnRoomMatchUserDetail implements Serializable {
 	/**赚取金币**/
 	private Integer winGold;
 
+	/**服务费**/
+	private Integer costGold;
+
 	/**玩家类型[1.庄家 2.闲家]**/
 	private Integer playerRole;
 
@@ -108,6 +111,14 @@ public class NnRoomMatchUserDetail implements Serializable {
 
 	public Integer getWinGold(){
 		return this.winGold;
+	}
+
+	public void setCostGold(Integer costGold){
+		this.costGold = costGold;
+	}
+
+	public Integer getCostGold(){
+		return this.costGold;
 	}
 
 	public void setPlayerRole(Integer playerRole){

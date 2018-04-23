@@ -7,7 +7,7 @@ public class NnConstans {
 	/**打牌时间*/
 	public final static int PLAY_GAME_TIME=15;
 	/**展示比赛结果时间*/
-	public final static int SHOW_MATCH_RESULT_TIME=10;
+	public final static int SHOW_MATCH_RESULT_TIME=30;
 	/**牛牛渠道*/
 	public final static String NN_CHANNEL_PRE="hun_nn_channel:";
 	/**牛牛用户*/
@@ -69,6 +69,9 @@ public class NnConstans {
 	
 	/**系统当前时间*/
 	public static final String NN_SYS_CUR_TIME_CACHE="sys_cur_time";
+	
+	/**游戏字典缓存*/
+    public static final String GAME_DIC_CACHE="game_dic_cache:";
 	
 	
 }

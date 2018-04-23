@@ -307,7 +307,7 @@ public class NnManagerDao {
 		try {
 
 			conn = DbUtil.getInstance().getConnection();
-			stmt = conn.prepareStatement("insert into `nn_room_match_user_detail` (`user_id`, `room_id`, `room_no`, `match_num`, `base_gold`, `win_gold`, `player_role`, `cards`, `card_type`, `is_win`, `doublex`, `position`, `create_date`) values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			stmt = conn.prepareStatement("insert into `nn_room_match_user_detail` (`user_id`, `room_id`, `room_no`, `match_num`, `base_gold`, `win_gold`, `player_role`, `cards`, `card_type`, `is_win`, `doublex`, `position`, `create_date`,cost_gold) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			conn.setAutoCommit(false);
 
 			for (NnRoomMatchUserDetail bean : list) {
@@ -324,6 +324,7 @@ public class NnManagerDao {
 				stmt.setInt(11, bean.getDoublex());
 				stmt.setInt(12, bean.getPosition());
 				stmt.setDate(13,new java.sql.Date(System.currentTimeMillis()));
+				stmt.setInt(14,bean.getCostGold());
 				stmt.addBatch();
 
 			}
