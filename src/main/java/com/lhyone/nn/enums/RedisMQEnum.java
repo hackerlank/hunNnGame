@@ -1,7 +1,7 @@
 package com.lhyone.nn.enums;
 
 public enum RedisMQEnum {
-	CLOSE_ROOM_CHANNEL("close_room_channel","解散房间");
+	CLOSE_ROOM_CHANNEL("hun_nn_close_room_channel","解散房间");
 	
 	private String code;
 	

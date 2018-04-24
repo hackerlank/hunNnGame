@@ -1322,7 +1322,7 @@ public class HunNnManager {
 					cards += num + ",";
 	
 				}
-				nrmu.setCards(cards.substring(0, cards.length()));
+				nrmu.setCards(cards.substring(0, cards.length()-1));
 				nrmu.setCardType(NnCardUtil.getCardType(card.getNumList()));
 				nrmu.setOrderNo(orderNo);
 				if (RedisUtil.hexists(NnConstans.NN_BUG_USER_PRE + roomNo, user.getUserId() + "")) {
@@ -1384,7 +1384,7 @@ public class HunNnManager {
 							cards += num + ",";
 	
 						}
-						nrmu.setCards(cards.substring(0, cards.length()));
+						nrmu.setCards(cards.substring(0, cards.length()-1));
 						nrmu.setCardType(NnCardUtil.getCardType(card.getNumList()));
 						nrmu.setCreateDate(new Date());
 						nrmu.setPosition(bean.getPosition());
@@ -1578,7 +1578,7 @@ public class HunNnManager {
 	 */
 	private static void calculation(String roomNo, HunNnBean.RoomInfo.Builder roomInfo, HunNnBean.UserInfo.Builder landlordUser, int landlordDouble, HunNnBean.PositionInfo.Builder landlordPosition,
 			HunNnBean.PositionInfo.Builder farmerPosition) {
-		logger.info("比牌数据one====={}||||two======={}",JSONObject.toJSONString(landlordPosition.getCard().getNumList()),JSONObject.toJSONString(farmerPosition.getCard().getNumList()));
+		logger.info("比牌数据one====={}||||two======={},three======={}",JSONObject.toJSONString(landlordPosition.getCard().getNumList()),JSONObject.toJSONString(farmerPosition.getCard().getNumList()),farmerPosition);
 		
 		boolean matchResult = NnCardUtil.compareCard(landlordPosition.getCard().getNumList(), farmerPosition.getCard().getNumList());
 		int farmerDoubleType = NnCardUtil.getCardType(farmerPosition.getCard().getNumList());
@@ -1613,7 +1613,7 @@ public class HunNnManager {
 				userChip.setWinGold(-winGold);
 				
 			} else {
-				int winGold = baseScore * landlordDouble;
+				int winGold = baseScore * farmertDouble;
 				int costGold=new BigDecimal(winGold*NnUtil.getCostRate()/100).setScale(BigDecimal.ROUND_UP, 0).intValue();
 				userChip.setCostGold(costGold);
 				int realWinGold=winGold-costGold;
@@ -1931,7 +1931,7 @@ public class HunNnManager {
 
 		HunNnBean.UserInfo.Builder landlordUser = getCurUser(Long.parseLong(landlordUserId), reqMsg.getRoomNo());
 		// 庄家金币不足
-		if (NnConstans.NN_LANDLORD_MIN_GOLD > landlordUser.getUserGold()||landlordUser.getLandlordTimes()>=NnConstans.NN_LANDLORD_TIMES) {
+		if (NnConstans.NN_LANDLORD_MIN_GOLD > landlordUser.getUserGold()) {
 
 			landlordPosition.clearUids();
 			NnUtil.setPosition(landlordPosition, reqMsg.getRoomNo(), 1);
@@ -2156,7 +2156,7 @@ public class HunNnManager {
 	 * @param map
 	 */
 	public static void sendMsg(HunNnBean.RspMsg rspMsg, String channelId) {
-		System.out.println();
+		logger.info("");
 		try {
 			for (Channel channel : ServerManager.channels) {
 				if (channel.id().asLongText().equalsIgnoreCase(channelId)) {

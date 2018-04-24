@@ -280,11 +280,19 @@ public class NnUtil {
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 //		 Map<String,HunNnBean.PositionInfo> map=NnUtil.getPositionInfoToMap("200106");
 //		 System.out.println(map);
 		 
 		 int type=NnUtil.getCardTypeDouble(NnCardRuleEnum.NIU_NIU.getCode());
+		 
+		 while(true){
+			 System.out.println("===========================");
+			 Map<String,HunNnBean.PositionInfo> map= NnUtil.getPositionInfoToMap("202787");
+			 System.out.println(map);
+			 Thread.sleep(400);
+		 }
+		 
 	}
 	
 	
