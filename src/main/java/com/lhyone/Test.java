@@ -37,6 +37,7 @@ public class Test {
 //		System.out.println(curStat);
 		
 //		logger.info("sssssssssssssssssssss");
-		new RedisSubMQThread("test_1234_1234").start();
+//		new RedisSubMQThread("test_1234_1234").start();
+		System.out.println(16%8);
 	}
 }

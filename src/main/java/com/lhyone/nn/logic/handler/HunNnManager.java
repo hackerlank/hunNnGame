@@ -1,5 +1,6 @@
 package com.lhyone.nn.logic.handler;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -216,6 +217,13 @@ public class HunNnManager {
 			
 			for(HunNnBean.PositionInfo up:listPosition){
 				up=up.toBuilder().clearUserChip().clearListGold().clearUids().clearCard().build();
+			}
+			
+			String landlordUserId = RedisUtil.get(NnConstans.NN_ROOM_LANDLORD_USER_PRE + reqMsg.getRoomNo());
+			if(StringUtils.isNotEmpty(landlordUserId)){
+				HunNnBean.UserInfo.Builder landLordUser = getCurUser(Long.parseLong(landlordUserId), reqMsg.getRoomNo());
+				rspData.setLandlord(landLordUser);
+				
 			}
 			rspData.addAllPosition(listPosition);
 
@@ -487,17 +495,17 @@ public class HunNnManager {
 					String landlordUserId = RedisUtil.get(NnConstans.NN_ROOM_LANDLORD_USER_PRE + roomNo);
 					reqMsg.setUserId(Long.parseLong(landlordUserId));
 					// 增加个人准备倒计时
-					ServerManager.executorTask.schedule(new MyTimerTask(reqMsg.build(), NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode()),restTime, TimeUnit.SECONDS);
+					ServerManager.executorTask.schedule(new MyTimerTask(reqMsg.build(), NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode(),timeVo.getRestTime()),restTime, TimeUnit.SECONDS);
 					
 					
 				}else if(timeVo.getRestTimeType()==NnTimeTaskEnum.PLAY_GAME_TIME.getCode()){
 					
-					ServerManager.executorTask.schedule(new MyTimerTask(reqMsg.build(), NnTimeTaskEnum.PLAY_GAME_TIME.getCode()), restTime, TimeUnit.SECONDS);
+					ServerManager.executorTask.schedule(new MyTimerTask(reqMsg.build(), NnTimeTaskEnum.PLAY_GAME_TIME.getCode(),timeVo.getRestTime()), restTime, TimeUnit.SECONDS);
 					Future<?> future=ServerManager.executorTask.scheduleAtFixedRate(new TimeTask(reqMsg.build(), NnTimeTaskEnum.PLAY_GAME_TIME.getCode()), 1, 1, TimeUnit.SECONDS);
 				    ServerManager.futures.put(reqMsg.getRoomNo(), future);
 				}else if(timeVo.getRestTimeType()==NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode()){
 					
-					ServerManager.executorTask.schedule(new MyTimerTask(reqMsg.build(), NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode()), restTime, TimeUnit.SECONDS);
+					ServerManager.executorTask.schedule(new MyTimerTask(reqMsg.build(), NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode(),timeVo.getRestTime()), restTime, TimeUnit.SECONDS);
 					
 				}
 				
@@ -567,7 +575,7 @@ public class HunNnManager {
 			RedisUtil.hset(NnConstans.NN_REST_TIME_PRE, reqMsg.getRoomNo(), JSONObject.toJSONString(timeout));
 			// 增加个人准备倒计时
 			{
-				ServerManager.executorTask.schedule(new MyTimerTask(reqMsg.build(), NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode()), NnConstans.USER_REDAY_IDLE_TIME, TimeUnit.SECONDS);
+				ServerManager.executorTask.schedule(new MyTimerTask(reqMsg.build(), NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode(),timeout.getRestTime()), NnConstans.USER_REDAY_IDLE_TIME, TimeUnit.SECONDS);
 			}
 			userInfo.setRedayTime(NnConstans.USER_REDAY_IDLE_TIME);
 		
@@ -777,8 +785,8 @@ public class HunNnManager {
 			
 			int totalChipGold= NnUtil.getCardTypeDouble(NnCardTypeTransEnum.NIU_NIU.getDestType())*(userInfo.getBaseGold()+reqMsg.getChipGold());
 			if(userInfo.getUserGold()<totalChipGold){
-				rspMsg.setCode(NnRspCodeEnum.$1101.getCode());
-				rspMsg.setMsg(NnRspCodeEnum.$1101.getMsg());
+				rspMsg.setCode(NnRspCodeEnum.$1102.getCode());
+				rspMsg.setMsg(NnRspCodeEnum.$1102.getMsg());
 				pushsingle(rspMsg.build(), ctx);
 				return;
 				
@@ -975,15 +983,6 @@ public class HunNnManager {
 
 		try {
 			// 枷锁
-			// 增加展示比赛结果定时任务
-			{
-				GameTimoutVo timeout = new GameTimoutVo();
-				timeout.setRestTime(System.currentTimeMillis());
-				timeout.setRestTimeType(NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode());
-				RedisUtil.hset(NnConstans.NN_REST_TIME_PRE, reqMsg.getRoomNo(), JSONObject.toJSONString(timeout));
-				ServerManager.executorTask.schedule(new MyTimerTask(reqMsg, NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode()), NnConstans.SHOW_MATCH_RESULT_TIME, TimeUnit.SECONDS);
-				NnUtil.delNnRoomSendGoldTimer(reqMsg.getRoomNo());
-			}
 
 			// 获取庄家位置，判断庄家是否为bug用户
 
@@ -1033,12 +1032,23 @@ public class HunNnManager {
 			// 设置当前当前房间状态为展示比赛结果
 			RedisUtil.hset(NnConstans.NN_ROOM_CUR_STATUS_PRE, reqMsg.getRoomNo(), NnRoomMatchStatusEnum.SHOW_MATCH_RESULT_STATUS.getCode() + "");
 
+			// 增加展示比赛结果定时任务
+			{
+				GameTimoutVo timeout = new GameTimoutVo();
+				timeout.setRestTime(System.currentTimeMillis());
+				timeout.setRestTimeType(NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode());
+				RedisUtil.hset(NnConstans.NN_REST_TIME_PRE, reqMsg.getRoomNo(), JSONObject.toJSONString(timeout));
+				ServerManager.executorTask.schedule(new MyTimerTask(reqMsg, NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode(),timeout.getRestTime()), NnConstans.SHOW_MATCH_RESULT_TIME, TimeUnit.SECONDS);
+				NnUtil.delNnRoomSendGoldTimer(reqMsg.getRoomNo());
+			}
+			
 			// 推送发牌操作
 			batchSendCard(reqMsg);
 
 			// 计算比赛结果
 			ServerManager.executor.execute(new NnWork(reqMsg, NnWrokEnum.SHOW_MATCH_RESULT.getCode()));
 
+			
 		} finally {
 			RedisUtil.hdel(NnConstans.NN_ROOM_LOCK_REQ, reqMsg.getRoomNo());
 		}
@@ -1103,264 +1113,299 @@ public class HunNnManager {
 	 * @param roomNo
 	 */
 	public static void showMatchResult(String roomNo) {
-		long time1=System.currentTimeMillis();
-		HunNnBean.PositionInfo.Builder landlordPosition = NnUtil.getPostion(roomNo, 1);
-		HunNnBean.PositionInfo.Builder position2 = NnUtil.getPostion(roomNo, 2);
-		HunNnBean.PositionInfo.Builder position3 = NnUtil.getPostion(roomNo, 3);
-		HunNnBean.PositionInfo.Builder position4 = NnUtil.getPostion(roomNo, 4);
-		HunNnBean.PositionInfo.Builder position5 = NnUtil.getPostion(roomNo, 5);
-
-		int landlordDoubleType = NnCardUtil.getCardType(landlordPosition.getCard().getNumList());
-		int landlordDouble = NnUtil.getCardTypeDouble(landlordDoubleType);
-
-		// 获取房间的信息
-		HunNnBean.RoomInfo.Builder roomInfo = getRoomInfo(roomNo);
-
-		for (HunNnBean.CardTypeDouble doubleType : roomInfo.getCardDoubleList()) {
-
-			if (doubleType.getCardType() == landlordDoubleType) {
-				landlordDouble = NnUtil.getCardTypeSpecialDouble(doubleType.getCardType());
+		
+		try {
+			long time1=System.currentTimeMillis();
+			HunNnBean.PositionInfo.Builder landlordPosition = NnUtil.getPostion(roomNo, 1);
+			HunNnBean.PositionInfo.Builder position2 = NnUtil.getPostion(roomNo, 2);
+			HunNnBean.PositionInfo.Builder position3 = NnUtil.getPostion(roomNo, 3);
+			HunNnBean.PositionInfo.Builder position4 = NnUtil.getPostion(roomNo, 4);
+			HunNnBean.PositionInfo.Builder position5 = NnUtil.getPostion(roomNo, 5);
+	
+			int landlordDoubleType = NnCardUtil.getCardType(landlordPosition.getCard().getNumList());
+			int landlordDouble = NnUtil.getCardTypeDouble(landlordDoubleType);
+	
+			// 获取房间的信息
+			HunNnBean.RoomInfo.Builder roomInfo = getRoomInfo(roomNo);
+	
+			for (HunNnBean.CardTypeDouble doubleType : roomInfo.getCardDoubleList()) {
+	
+				if (doubleType.getCardType() == landlordDoubleType) {
+					landlordDouble = NnUtil.getCardTypeSpecialDouble(doubleType.getCardType());
+				}
 			}
-		}
-
-		HunNnBean.CardInfo.Builder landlordCard=HunNnBean.CardInfo.newBuilder(landlordPosition.getCard());
-		landlordCard.setCardDouble(landlordDouble);
-		landlordPosition.setCard(landlordCard);
-		
-		
-		HunNnBean.UserInfo.Builder landlordUser = getCurUser(landlordPosition.getUids(0), roomNo);
-
-		
-		calculation(roomNo, roomInfo, landlordUser, landlordDouble, landlordPosition, position2);
-		calculation(roomNo, roomInfo, landlordUser, landlordDouble, landlordPosition, position3);
-		calculation(roomNo, roomInfo, landlordUser, landlordDouble, landlordPosition, position4);
-		calculation(roomNo, roomInfo, landlordUser, landlordDouble, landlordPosition, position5);
-
-		
-		
-		 List<Long> uids=getPositionAllUsers(position2,position3,position4,position5);
-		
-		 Map<Long,HunNnBean.UserInfo.Builder> allUserMap=new HashMap<Long,HunNnBean.UserInfo.Builder>();
-		//计算每个用户位置总盈亏
-		 for(Long uid:uids){
+	
+			HunNnBean.CardInfo.Builder landlordCard=HunNnBean.CardInfo.newBuilder(landlordPosition.getCard());
+			landlordCard.setCardDouble(landlordDouble);
+			landlordPosition.setCard(landlordCard);
+			
+			
+			HunNnBean.UserInfo.Builder landlordUser = getCurUser(landlordPosition.getUids(0), roomNo);
+	
+			
+			calculation(roomNo, roomInfo, landlordUser, landlordDouble, landlordPosition, position2);
+			calculation(roomNo, roomInfo, landlordUser, landlordDouble, landlordPosition, position3);
+			calculation(roomNo, roomInfo, landlordUser, landlordDouble, landlordPosition, position4);
+			calculation(roomNo, roomInfo, landlordUser, landlordDouble, landlordPosition, position5);
+	
+			
+			
+			 List<Long> uids=getPositionAllUsers(position2,position3,position4,position5);
+			
+			 Map<Long,HunNnBean.UserInfo.Builder> allUserMap=new HashMap<Long,HunNnBean.UserInfo.Builder>();
+			//计算每个用户位置总盈亏
+			 for(Long uid:uids){
+				 
+				 HunNnBean.UserInfo.Builder curUser= HunNnBean.UserInfo.newBuilder();
+				 curUser= getCurUser(uid, roomNo);
+				 curUser.clearUPositions();
+				 
+				 Map<Integer,HunNnBean.PositionInfo> upchipMap=new HashMap<Integer,HunNnBean.PositionInfo>();
+				 if(position2.getUidsList().contains(uid)){
+					 calUserWinGold(uid, position2, curUser, allUserMap,upchipMap);
+				 }
+				 if(position3.getUidsList().contains(uid)){
+					 calUserWinGold(uid, position3, curUser, allUserMap,upchipMap);
+				 }
+				 if(position4.getUidsList().contains(uid)){
+					 calUserWinGold(uid, position4, curUser, allUserMap,upchipMap);
+				 }
+				 if(position5.getUidsList().contains(uid)){
+					 calUserWinGold(uid, position5, curUser, allUserMap,upchipMap);
+				 }
+				 
+				 for(Integer p:upchipMap.keySet()){
+					 curUser.addUPositions(upchipMap.get(p));
+				 }
+				 allUserMap.put(uid, curUser);
+				
+			 }
+			
+			//重新计算闲家用户金币，主要是为了防止用户金币不足情况
 			 
-			 HunNnBean.UserInfo.Builder curUser= HunNnBean.UserInfo.newBuilder();
-			 curUser= getCurUser(uid, roomNo);
-			 curUser.clearUPositions();
-			 
-			 Map<Integer,HunNnBean.PositionInfo> upchipMap=new HashMap<Integer,HunNnBean.PositionInfo>();
-			 if(position2.getUidsList().contains(uid)){
-				 calUserWinGold(uid, position2, curUser, allUserMap,upchipMap);
+			 for(long uid:allUserMap.keySet()){
+				 
+				 HunNnBean.UserInfo.Builder user=allUserMap.get(uid);
+				 long winGold=user.getUserGold()+user.getWinGold()+user.getBaseGold();
+				 if(winGold<0){
+					 landlordUser.setWinGold((int)(landlordUser.getWinGold()+winGold));
+					 user.setWinGold(-(int)(user.getUserGold()+user.getBaseGold()));
+					 allUserMap.put(uid, user);
+				 }
+				 
 			 }
-			 if(position3.getUidsList().contains(uid)){
-				 calUserWinGold(uid, position3, curUser, allUserMap,upchipMap);
-			 }
-			 if(position4.getUidsList().contains(uid)){
-				 calUserWinGold(uid, position4, curUser, allUserMap,upchipMap);
-			 }
-			 if(position5.getUidsList().contains(uid)){
-				 calUserWinGold(uid, position5, curUser, allUserMap,upchipMap);
-			 }
-			 
-			 for(Integer p:upchipMap.keySet()){
-				 curUser.addUPositions(upchipMap.get(p));
-			 }
-			 allUserMap.put(uid, curUser);
+	//		 
 			
-		 }
-		
-		//重新计算闲家用户金币，主要是为了防止用户金币不足情况
-		 
-		 for(long uid:allUserMap.keySet()){
-			 
-			 HunNnBean.UserInfo.Builder user=allUserMap.get(uid);
-			 long winGold=user.getUserGold()+user.getWinGold()+user.getBaseGold();
-			 if(winGold<0){
-				 landlordUser.setWinGold((int)(landlordUser.getWinGold()+winGold));
-				 user.setWinGold(-(int)(user.getUserGold()+user.getBaseGold()));
-				 allUserMap.put(uid, user);
-			 }
-			 
-		 }
-//		 
-		
-		
-		
-		// 等到庄家总金币
-		long totalGold = NnManagerDao.instance().getUserGold(landlordUser.getUserId());
-		landlordUser.setUserGold(totalGold);
-		landlordUser.setTotalGold(totalGold);
-		
-
-		if (landlordUser.getTotalGold() + landlordUser.getWinGold() < 0) {
-			// 计算闲家赢家用户的总金币数
-			int userWinTotalGold = 0;
 			
-			calUserWinTotalGold(position2,userWinTotalGold);
-			calUserWinTotalGold(position3,userWinTotalGold);
-			calUserWinTotalGold(position4,userWinTotalGold);
-			calUserWinTotalGold(position5,userWinTotalGold);
 			
-
-			int userRealWinTotalGold = 0;
+			// 等到庄家总金币
+			long totalGold = NnManagerDao.instance().getUserGold(landlordUser.getUserId());
+			landlordUser.setUserGold(totalGold);
+			landlordUser.setTotalGold(totalGold);
 			
-			calUserRealWinTotalGold(position2, userRealWinTotalGold,userWinTotalGold,landlordUser,allUserMap);
-			calUserRealWinTotalGold(position3, userRealWinTotalGold,userWinTotalGold,landlordUser,allUserMap);
-			calUserRealWinTotalGold(position4, userRealWinTotalGold,userWinTotalGold,landlordUser,allUserMap);
-			calUserRealWinTotalGold(position5, userRealWinTotalGold,userWinTotalGold,landlordUser,allUserMap);
-			
-			landlordUser.setWinGold(-userRealWinTotalGold);
-			
-		}
-		
-		
-		//计算每个位置总盈亏
-		
-		calPositionTotalWinGold(position2);
-		calPositionTotalWinGold(position3);
-		calPositionTotalWinGold(position4);
-		calPositionTotalWinGold(position5);
-		
-		//设置庄家位置总盈亏
-		landlordPosition.setWinGold(landlordUser.getWinGold());
-		
-		 allUserMap.put(landlordUser.getUserId(), landlordUser);
-		 
-		// 更新缓存
-		for (Long key: allUserMap.keySet()) {
-			RedisUtil.hset(NnConstans.NN_ROOM_USER_INFO_PRE + roomNo, key + "", JsonFormat.printToString(allUserMap.get(key).build()));
-
-		}
-		
-		NnUtil.setPosition(landlordPosition, roomNo, 1);
-		NnUtil.setPosition(position2, roomNo, 2);
-		NnUtil.setPosition(position3, roomNo, 3);
-		NnUtil.setPosition(position4, roomNo, 4);
-		NnUtil.setPosition(position5, roomNo, 5);
-
-		NnRoom room = getRoomVo(roomNo);
-
-		// 封装缓存数据
-
-		List<DbVo> listDb = new ArrayList<DbVo>();
-
-
-		
-		for ( Long key: allUserMap.keySet()) {
-			HunNnBean.UserInfo.Builder user=allUserMap.get(key);
-			DbVo dbVo = new DbVo();
-
-			dbVo.setUserId(user.getUserId());
-			dbVo.setWinGold(user.getWinGold()+user.getBaseGold());
-
-			String orderNo = UUID.randomUUID().toString();
-			GoldRecord gr = new GoldRecord();
-			gr.setUserId(user.getUserId());
-			gr.setOrderNo(orderNo);
-			gr.setGoldCount(room.getCostGold().intValue());
-			gr.setCostType(GoldTypeEnum.HUNDRED_NIU_COST.getType());
-			gr.setBindId(room.getCreateUserId());
-			gr.setCreateDate(new Timestamp(System.currentTimeMillis()));
-
-			dbVo.setGoldRecord(gr);
-
-			UserCostRecord ucr = new UserCostRecord();
-			ucr.setUserId(user.getUserId());
-			ucr.setRoomNo(room.getRoomNo());
-			ucr.setRoomId(room.getId());
-			ucr.setOrderNo(orderNo);
-			ucr.setGameType(GoldTypeEnum.HUNDRED_NIU_COST.getType());
-			ucr.setCostGold(room.getCostGold().intValue());
-			ucr.setIsDel(NnYesNoEnum.NO.getCode());
-			ucr.setBindId(room.getId());
-			ucr.setCreateDate(new Date());
-
-			dbVo.setUserCostRecord(ucr);
-
-			NnRoomMatchUser nrmu = new NnRoomMatchUser();
-			nrmu.setUserId(user.getUserId());
-			nrmu.setRoomId(room.getId());
-			nrmu.setRoomNo(room.getRoomNo());
-			nrmu.setMatchNum(roomInfo.getRoomCurMatchCount());
-			nrmu.setTotalGold(user.getTotalGold());
-			nrmu.setBaseGold(user.getBaseGold());
-			nrmu.setCostGold(room.getCostGold().intValue());
-			nrmu.setPlayerRole(user.getPlayerType());
-			nrmu.setWinGold(user.getWinGold());
-			if (user.getWinGold() >= 0) {
-				nrmu.setIsWin(NnYesNoEnum.YES.getCode());
-			} else {
-				nrmu.setIsWin(NnYesNoEnum.NO.getCode());
+			if (landlordUser.getTotalGold() + landlordUser.getWinGold() < 0) {
+				// 计算闲家赢家用户的总金币数
+				int userWinTotalGold = 0;
+				
+				calUserWinTotalGold(position2,userWinTotalGold);
+				calUserWinTotalGold(position3,userWinTotalGold);
+				calUserWinTotalGold(position4,userWinTotalGold);
+				calUserWinTotalGold(position5,userWinTotalGold);
+				
+	
+				int userRealWinTotalGold = 0;
+				
+				calUserRealWinTotalGold(position2, userRealWinTotalGold,userWinTotalGold,landlordUser,allUserMap);
+				calUserRealWinTotalGold(position3, userRealWinTotalGold,userWinTotalGold,landlordUser,allUserMap);
+				calUserRealWinTotalGold(position4, userRealWinTotalGold,userWinTotalGold,landlordUser,allUserMap);
+				calUserRealWinTotalGold(position5, userRealWinTotalGold,userWinTotalGold,landlordUser,allUserMap);
+				
+				landlordUser.setWinGold(-userRealWinTotalGold);
+				
 			}
 			
-
-			HunNnBean.CardInfo card = HunNnBean.CardInfo.getDefaultInstance();
-			if (landlordPosition.getUidsList().contains(user.getUserId())) {
-				card = landlordPosition.getCard();
-			} else if (position2.getUidsList().contains(user.getUserId())) {
-				card = position2.getCard();
-			} else if (position3.getUidsList().contains(user.getUserId())) {
-				card = position3.getCard();
-			} else if (position4.getUidsList().contains(user.getUserId())) {
-				card = position4.getCard();
-			} else if (position5.getUidsList().contains(user.getUserId())) {
-				card = position5.getCard();
-			}
-			String cards = "";
-			for (int num : card.getNumList()) {
-				cards += num + ",";
-
-			}
-			nrmu.setCards(cards.substring(0, cards.length()));
-			nrmu.setCardType(NnCardUtil.getCardType(card.getNumList()));
-			nrmu.setOrderNo(orderNo);
-			if (RedisUtil.hexists(NnConstans.NN_BUG_USER_PRE + roomNo, user.getUserId() + "")) {
-				nrmu.setIsBug(NnYesNoEnum.YES.getCode());
-			} else {
-				nrmu.setIsBug(NnYesNoEnum.NO.getCode());
-			}
-			nrmu.setCreateDate(new Date());
-
-			dbVo.setNnRoomMatchUser(nrmu);
-
-			UserMatchRecord umr = new UserMatchRecord();
-			umr.setUserId(user.getUserId());
-			umr.setWinGold(user.getWinGold());
-			umr.setRoomId(room.getId());
-			umr.setOrderNo(orderNo);
-			umr.setGameType(GameTypeEnum.HUNDRED_NIU.getType());
-			umr.setBindId(room.getId());
-			umr.setCreateDate(new Date());
-
-			dbVo.setUserMatchRecord(umr);
-
-			listDb.add(dbVo);
-			//
-		}
-
-		
-		List<NnRoomMatchUserDetail> list=new ArrayList<NnRoomMatchUserDetail>();
-		List<HunNnBean.PositionInfo> listPosition=NnUtil.getPositionInfo(roomNo);
-		
-		if(allUserMap!=null){
 			
+			//计算每个位置总盈亏
 			
-		
-		for(HunNnBean.PositionInfo bean:listPosition){
+			calPositionTotalWinGold(position2);
+			calPositionTotalWinGold(position3);
+			calPositionTotalWinGold(position4);
+			calPositionTotalWinGold(position5);
 			
-			if(bean.getPosition()!=1){
-				for(HunNnBean.UserChip uchip: bean.getUserChipList()){
-					HunNnBean.UserInfo.Builder user=allUserMap.get(uchip.getUserId());
+			//设置庄家位置总盈亏
+			landlordPosition.setWinGold(landlordUser.getWinGold());
+			
+			 allUserMap.put(landlordUser.getUserId(), landlordUser);
+			 
+			// 更新缓存
+			for (Long key: allUserMap.keySet()) {
+				RedisUtil.hset(NnConstans.NN_ROOM_USER_INFO_PRE + roomNo, key + "", JsonFormat.printToString(allUserMap.get(key).build()));
+	
+			}
+			
+			NnUtil.setPosition(landlordPosition, roomNo, 1);
+			NnUtil.setPosition(position2, roomNo, 2);
+			NnUtil.setPosition(position3, roomNo, 3);
+			NnUtil.setPosition(position4, roomNo, 4);
+			NnUtil.setPosition(position5, roomNo, 5);
+	
+			NnRoom room = getRoomVo(roomNo);
+	
+			// 封装缓存数据
+	
+			List<DbVo> listDb = new ArrayList<DbVo>();
+	
+	
+			
+			for ( Long key: allUserMap.keySet()) {
+				HunNnBean.UserInfo.Builder user=allUserMap.get(key);
+				DbVo dbVo = new DbVo();
+	
+				dbVo.setUserId(user.getUserId());
+				dbVo.setWinGold(user.getWinGold()+user.getBaseGold());
+	
+				String orderNo = UUID.randomUUID().toString();
+				GoldRecord gr = new GoldRecord();
+				gr.setUserId(user.getUserId());
+				gr.setOrderNo(orderNo);
+				gr.setGoldCount(user.getCostGold());
+				gr.setCostType(GoldTypeEnum.HUNDRED_NIU_COST.getType());
+				gr.setBindId(room.getCreateUserId());
+				gr.setCreateDate(new Timestamp(System.currentTimeMillis()));
+				
+				dbVo.setGoldRecord(gr);
+	
+				UserCostRecord ucr = new UserCostRecord();
+				ucr.setUserId(user.getUserId());
+				ucr.setRoomNo(room.getRoomNo());
+				ucr.setRoomId(room.getId());
+				ucr.setOrderNo(orderNo);
+				ucr.setGameType(GoldTypeEnum.HUNDRED_NIU_COST.getType());
+				ucr.setCostGold(room.getCostGold().intValue());
+				ucr.setIsDel(NnYesNoEnum.NO.getCode());
+				ucr.setBindId(room.getId());
+				ucr.setCreateDate(new Date());
+	
+				dbVo.setUserCostRecord(ucr);
+	
+				NnRoomMatchUser nrmu = new NnRoomMatchUser();
+				nrmu.setUserId(user.getUserId());
+				nrmu.setRoomId(room.getId());
+				nrmu.setRoomNo(room.getRoomNo());
+				nrmu.setMatchNum(roomInfo.getRoomCurMatchCount());
+				nrmu.setTotalGold(user.getTotalGold());
+				nrmu.setBaseGold(user.getBaseGold());
+				nrmu.setCostGold(user.getCostGold());
+				nrmu.setPlayerRole(user.getPlayerType());
+				nrmu.setWinGold(user.getWinGold());
+				if (user.getWinGold() >= 0) {
+					nrmu.setIsWin(NnYesNoEnum.YES.getCode());
+				} else {
+					nrmu.setIsWin(NnYesNoEnum.NO.getCode());
+				}
+				
+	
+				HunNnBean.CardInfo card = HunNnBean.CardInfo.getDefaultInstance();
+				if (landlordPosition.getUidsList().contains(user.getUserId())) {
+					card = landlordPosition.getCard();
+				} else if (position2.getUidsList().contains(user.getUserId())) {
+					card = position2.getCard();
+				} else if (position3.getUidsList().contains(user.getUserId())) {
+					card = position3.getCard();
+				} else if (position4.getUidsList().contains(user.getUserId())) {
+					card = position4.getCard();
+				} else if (position5.getUidsList().contains(user.getUserId())) {
+					card = position5.getCard();
+				}
+				String cards = "";
+				for (int num : card.getNumList()) {
+					cards += num + ",";
+	
+				}
+				nrmu.setCards(cards.substring(0, cards.length()-1));
+				nrmu.setCardType(NnCardUtil.getCardType(card.getNumList()));
+				nrmu.setOrderNo(orderNo);
+				if (RedisUtil.hexists(NnConstans.NN_BUG_USER_PRE + roomNo, user.getUserId() + "")) {
+					nrmu.setIsBug(NnYesNoEnum.YES.getCode());
+				} else {
+					nrmu.setIsBug(NnYesNoEnum.NO.getCode());
+				}
+				nrmu.setCreateDate(new Date());
+	
+				dbVo.setNnRoomMatchUser(nrmu);
+	
+				UserMatchRecord umr = new UserMatchRecord();
+				umr.setUserId(user.getUserId());
+				umr.setWinGold(user.getWinGold());
+				umr.setRoomId(room.getId());
+				umr.setOrderNo(orderNo);
+				umr.setGameType(GameTypeEnum.HUNDRED_NIU.getType());
+				umr.setBindId(room.getId());
+				umr.setCreateDate(new Date());
+	
+				dbVo.setUserMatchRecord(umr);
+	
+				listDb.add(dbVo);
+				//
+			}
+	
+			
+			List<NnRoomMatchUserDetail> list=new ArrayList<NnRoomMatchUserDetail>();
+			List<HunNnBean.PositionInfo> listPosition=NnUtil.getPositionInfo(roomNo);
+			
+			if(allUserMap!=null){
+				
+				
+			
+			for(HunNnBean.PositionInfo bean:listPosition){
+				
+				if(bean.getPosition()!=1){
+					for(HunNnBean.UserChip uchip: bean.getUserChipList()){
+						HunNnBean.UserInfo.Builder user=allUserMap.get(uchip.getUserId());
+						NnRoomMatchUserDetail nrmu = new NnRoomMatchUserDetail();
+						nrmu.setUserId(user.getUserId());
+						nrmu.setRoomId(room.getId());
+						nrmu.setRoomNo(room.getRoomNo());
+						nrmu.setMatchNum(roomInfo.getRoomCurMatchCount());
+						nrmu.setBaseGold(uchip.getGold());
+						nrmu.setPlayerRole(user.getPlayerType());
+						nrmu.setWinGold(uchip.getWinGold());
+						nrmu.setDoublex(1);
+						nrmu.setCostGold(uchip.getCostGold());
+						if (uchip.getWinGold() >= 0) {
+							nrmu.setIsWin(NnYesNoEnum.YES.getCode());
+						} else {
+							nrmu.setIsWin(NnYesNoEnum.NO.getCode());
+						}
+						
+						HunNnBean.CardInfo card =bean.getCard();
+						String cards = "";
+						for (int num : card.getNumList()) {
+							cards += num + ",";
+	
+						}
+						nrmu.setCards(cards.substring(0, cards.length()-1));
+						nrmu.setCardType(NnCardUtil.getCardType(card.getNumList()));
+						nrmu.setCreateDate(new Date());
+						nrmu.setPosition(bean.getPosition());
+						list.add(nrmu);
+					}
+					
+				}else{
+					
+					
+					HunNnBean.UserInfo.Builder user=getCurUser(bean.getUids(0), roomNo);
 					NnRoomMatchUserDetail nrmu = new NnRoomMatchUserDetail();
 					nrmu.setUserId(user.getUserId());
 					nrmu.setRoomId(room.getId());
 					nrmu.setRoomNo(room.getRoomNo());
 					nrmu.setMatchNum(roomInfo.getRoomCurMatchCount());
-					nrmu.setBaseGold(uchip.getGold());
+					nrmu.setBaseGold(user.getBaseGold());
+					nrmu.setCostGold(user.getCostGold());
 					nrmu.setPlayerRole(user.getPlayerType());
-					nrmu.setWinGold(uchip.getWinGold());
+					nrmu.setWinGold(user.getWinGold());
 					nrmu.setDoublex(1);
-					if (uchip.getWinGold() >= 0) {
+					if (user.getWinGold() >= 0) {
 						nrmu.setIsWin(NnYesNoEnum.YES.getCode());
 					} else {
 						nrmu.setIsWin(NnYesNoEnum.NO.getCode());
@@ -1370,70 +1415,41 @@ public class HunNnManager {
 					String cards = "";
 					for (int num : card.getNumList()) {
 						cards += num + ",";
-
+	
 					}
-					nrmu.setCards(cards.substring(0, cards.length()));
+					nrmu.setCards(cards.substring(0, cards.length()-1));
 					nrmu.setCardType(NnCardUtil.getCardType(card.getNumList()));
 					nrmu.setCreateDate(new Date());
-					nrmu.setPosition(bean.getPosition());
+					nrmu.setPosition(1);
 					list.add(nrmu);
 				}
 				
-			}else{
-				
-				
-				HunNnBean.UserInfo.Builder user=getCurUser(bean.getUids(0), roomNo);
-				NnRoomMatchUserDetail nrmu = new NnRoomMatchUserDetail();
-				nrmu.setUserId(user.getUserId());
-				nrmu.setRoomId(room.getId());
-				nrmu.setRoomNo(room.getRoomNo());
-				nrmu.setMatchNum(roomInfo.getRoomCurMatchCount());
-				nrmu.setBaseGold(user.getBaseGold());
-				nrmu.setPlayerRole(user.getPlayerType());
-				nrmu.setWinGold(user.getWinGold());
-				nrmu.setDoublex(1);
-				if (user.getWinGold() >= 0) {
-					nrmu.setIsWin(NnYesNoEnum.YES.getCode());
-				} else {
-					nrmu.setIsWin(NnYesNoEnum.NO.getCode());
-				}
-				
-				HunNnBean.CardInfo card =bean.getCard();
-				String cards = "";
-				for (int num : card.getNumList()) {
-					cards += num + ",";
-
-				}
-				nrmu.setCards(cards.substring(0, cards.length()));
-				nrmu.setCardType(NnCardUtil.getCardType(card.getNumList()));
-				nrmu.setCreateDate(new Date());
-				nrmu.setPosition(1);
-				list.add(nrmu);
 			}
 			
+			}
+			
+			NnManagerDao.instance().addDb(listDb);
+			NnManagerDao.instance().addMatchDetail(list);
+			
+			
+			//更新用户金币
+			
+			// 更新缓存
+			for (Long key: allUserMap.keySet()) {
+				long userGold=NnManagerDao.instance().getUserGold(key);
+				HunNnBean.UserInfo.Builder userInfo=allUserMap.get(key);
+				userInfo.setUserGold(userGold);
+				RedisUtil.hset(NnConstans.NN_ROOM_USER_INFO_PRE + roomNo, key + "", JsonFormat.printToString(allUserMap.get(key).build()));
+	
+			}
+			long time2=System.currentTimeMillis();
+			System.out.println("计算比赛结果耗时:"+(time2-time1));
+			// 推送比赛结果,主要是计算庄家输赢和自己输赢
+			batchSendMatchResult(roomNo);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			e.printStackTrace();
 		}
-		
-		}
-		
-		NnManagerDao.instance().addDb(listDb);
-		NnManagerDao.instance().addMatchDetail(list);
-		
-		
-		//更新用户金币
-		
-		// 更新缓存
-		for (Long key: allUserMap.keySet()) {
-			long userGold=NnManagerDao.instance().getUserGold(key);
-			HunNnBean.UserInfo.Builder userInfo=allUserMap.get(key);
-			userInfo.setUserGold(userGold);
-			RedisUtil.hset(NnConstans.NN_ROOM_USER_INFO_PRE + roomNo, key + "", JsonFormat.printToString(allUserMap.get(key).build()));
-
-		}
-		long time2=System.currentTimeMillis();
-		System.out.println("计算比赛结果耗时:"+(time2-time1));
-		// 推送比赛结果,主要是计算庄家输赢和自己输赢
-		batchSendMatchResult(roomNo);
-
 	}
 	
 	private static void calUserWinGold(Long uid,HunNnBean.PositionInfo.Builder position,HunNnBean.UserInfo.Builder curUser,Map<Long,HunNnBean.UserInfo.Builder> allUserMap, Map<Integer,HunNnBean.PositionInfo>  upchipMap){
@@ -1459,8 +1475,8 @@ public class HunNnManager {
 					 
 					 upchipMap.put(position.getPosition(), pp.build());
 				 }
-				 curUser.setWinGold(curUser.getWinGold()+uchip.getWinGold());
-				 
+				 curUser.setWinGold(curUser.getWinGold()+uchip.getWinGold()-uchip.getCostGold());
+				 curUser.setCostGold(curUser.getCostGold()+uchip.getWinGold());
 				 allUserMap.put(uid, curUser);
 			 }
 			 
@@ -1491,9 +1507,7 @@ public class HunNnManager {
 		for (HunNnBean.UserChip userChip : position.getUserChipList()) {
 			
 			if(userChip.getWinGold()>=0){
-				userWinTotalGold = userWinTotalGold + userChip.getWinGold();
-			}else{
-				break;
+				userWinTotalGold = userWinTotalGold + userChip.getWinGold()-userChip.getCostGold();
 			}
 			
 		}
@@ -1517,9 +1531,10 @@ public class HunNnManager {
 				userRealWinTotalGold = userRealWinTotalGold + m;
 //				userChip=userChip.toBuilder().setWinGold(m).build();
 				
+				//去除盈利金币小于服务费的情况
 				if(allUserMap.containsKey(userChip.getUserId())){
 					
-					int diffGold=userChip.getGold()-m;
+					int diffGold=userChip.getWinGold()-userChip.getCostGold()-m;
 					HunNnBean.UserInfo.Builder user=allUserMap.get(userChip);
 					user.setWinGold(user.getWinGold()-diffGold);
 					allUserMap.put(userChip.getUserId(), user);
@@ -1563,7 +1578,7 @@ public class HunNnManager {
 	 */
 	private static void calculation(String roomNo, HunNnBean.RoomInfo.Builder roomInfo, HunNnBean.UserInfo.Builder landlordUser, int landlordDouble, HunNnBean.PositionInfo.Builder landlordPosition,
 			HunNnBean.PositionInfo.Builder farmerPosition) {
-		logger.info("比牌数据one====={}||||two======={}",JSONObject.toJSONString(landlordPosition.getCard().getNumList()),JSONObject.toJSONString(farmerPosition.getCard().getNumList()));
+		logger.info("比牌数据one====={}||||two======={},three======={}",JSONObject.toJSONString(landlordPosition.getCard().getNumList()),JSONObject.toJSONString(farmerPosition.getCard().getNumList()),farmerPosition);
 		
 		boolean matchResult = NnCardUtil.compareCard(landlordPosition.getCard().getNumList(), farmerPosition.getCard().getNumList());
 		int farmerDoubleType = NnCardUtil.getCardType(farmerPosition.getCard().getNumList());
@@ -1589,14 +1604,23 @@ public class HunNnManager {
 			if (matchResult) {
 
 				int winGold = baseScore * landlordDouble;
-				landlordUser.setWinGold(landlordUser.getWinGold() + winGold);
+				int costGold=new BigDecimal(winGold*NnUtil.getCostRate()/100).setScale(BigDecimal.ROUND_UP, 0).intValue();
+				userChip.setCostGold(costGold);
+				int realWinGold=winGold-costGold;
+				
+				landlordUser.setWinGold(landlordUser.getWinGold() + realWinGold);
 
 				userChip.setWinGold(-winGold);
-
+				
 			} else {
-				landlordUser.setWinGold(landlordUser.getWinGold() - baseScore * farmertDouble);
+				int winGold = baseScore * farmertDouble;
+				int costGold=new BigDecimal(winGold*NnUtil.getCostRate()/100).setScale(BigDecimal.ROUND_UP, 0).intValue();
+				userChip.setCostGold(costGold);
+				int realWinGold=winGold-costGold;
+				
+				landlordUser.setWinGold(landlordUser.getWinGold() - realWinGold);
 
-				userChip.setWinGold(baseScore * farmertDouble);
+				userChip.setWinGold(winGold);
 			}
 			listChipUser.add(userChip.build());
 		}
@@ -1907,7 +1931,7 @@ public class HunNnManager {
 
 		HunNnBean.UserInfo.Builder landlordUser = getCurUser(Long.parseLong(landlordUserId), reqMsg.getRoomNo());
 		// 庄家金币不足
-		if (NnConstans.NN_LANDLORD_MIN_GOLD > landlordUser.getUserGold()||landlordUser.getLandlordTimes()>=NnConstans.NN_LANDLORD_TIMES) {
+		if (NnConstans.NN_LANDLORD_MIN_GOLD > landlordUser.getUserGold()) {
 
 			landlordPosition.clearUids();
 			NnUtil.setPosition(landlordPosition, reqMsg.getRoomNo(), 1);
@@ -1940,7 +1964,7 @@ public class HunNnManager {
 				RedisUtil.hset(NnConstans.NN_REST_TIME_PRE, reqMsg.getRoomNo(), JSONObject.toJSONString(timeout));
 				// 增加个人准备倒计时
 				{
-					ServerManager.executorTask.schedule(new MyTimerTask(reqMsg, NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode()), NnConstans.USER_REDAY_IDLE_TIME, TimeUnit.SECONDS);
+					ServerManager.executorTask.schedule(new MyTimerTask(reqMsg, NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode(),timeout.getRestTime()), NnConstans.USER_REDAY_IDLE_TIME, TimeUnit.SECONDS);
 				}
 				userInfo.setRedayTime(NnConstans.USER_REDAY_IDLE_TIME);
 			}
@@ -1979,7 +2003,7 @@ public class HunNnManager {
 
 		// 设置发牌倒计时,设置金币倒计时
 		{
-			ServerManager.executorTask.schedule(new MyTimerTask(reqMsg, NnTimeTaskEnum.PLAY_GAME_TIME.getCode()), NnConstans.PLAY_GAME_TIME, TimeUnit.SECONDS);
+			ServerManager.executorTask.schedule(new MyTimerTask(reqMsg, NnTimeTaskEnum.PLAY_GAME_TIME.getCode(),timeout.getRestTime()), NnConstans.PLAY_GAME_TIME, TimeUnit.SECONDS);
 			Future<?> future=ServerManager.executorTask.scheduleAtFixedRate(new TimeTask(reqMsg, NnTimeTaskEnum.PLAY_GAME_TIME.getCode()), 1, 1, TimeUnit.SECONDS);
 		    ServerManager.futures.put(reqMsg.getRoomNo(), future);
 					
@@ -2132,7 +2156,7 @@ public class HunNnManager {
 	 * @param map
 	 */
 	public static void sendMsg(HunNnBean.RspMsg rspMsg, String channelId) {
-		System.out.println();
+		logger.info("");
 		try {
 			for (Channel channel : ServerManager.channels) {
 				if (channel.id().asLongText().equalsIgnoreCase(channelId)) {

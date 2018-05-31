@@ -41,7 +41,7 @@ public class HunNnServer {
     	new RedisSubMQThread(RedisMQEnum.CLOSE_ROOM_CHANNEL.getCode()).start();
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        ServerManager.executorTask.scheduleWithFixedDelay(new MyTimerTask(null,NnTimeTaskEnum.LISTEN_TIME.getCode()), 0, 1, TimeUnit.SECONDS);
+        ServerManager.executorTask.scheduleWithFixedDelay(new MyTimerTask(null,NnTimeTaskEnum.LISTEN_TIME.getCode(),0), 0, 1, TimeUnit.SECONDS);
         try{
         	DataInit.dataInit(port);
             System.out.println("服务已启动");

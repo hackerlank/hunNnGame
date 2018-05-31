@@ -21,9 +21,11 @@ public class MyTimerTask implements Runnable{
 		
 	private HunNnBean.ReqMsg reqMsg;
 	private int type;
-	public MyTimerTask(HunNnBean.ReqMsg reqMsg,int type){
+	private long timestamp;
+	public MyTimerTask(HunNnBean.ReqMsg reqMsg,int type,long timestamp){
 		this.reqMsg=reqMsg;
 		this.type=type;
+		this.timestamp=timestamp;
 	}
 	
 	public void run() {
@@ -38,11 +40,11 @@ public class MyTimerTask implements Runnable{
 			RedisUtil.set(NnConstans.NN_SYS_CUR_TIME_CACHE, System.currentTimeMillis()+"");
 		}else{	
 			GameTimoutVo timeVo= getGameTimoutVo(reqMsg.getRoomNo());
-			if(NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode()==type&&null!=timeVo){//庄家准备
+			if(NnTimeTaskEnum.USER_REDAY_IDLE_TIME.getCode()==type&&null!=timeVo&&timestamp==timeVo.getRestTime()){//庄家准备
 			
 				
 				HunNnBean.UserInfo.Builder userInfo=HunNnManager.getCurUser(reqMsg.getUserId(), reqMsg.getRoomNo());
-				if(userInfo.getIsReday()==NnYesNoEnum.YES.getCode()&&null!=userInfo){
+				if(null!=userInfo&&userInfo.getIsReday()==NnYesNoEnum.YES.getCode()){
 					HunNnManager.idleTimeTask(reqMsg);
 				}else{
 					
@@ -74,7 +76,7 @@ public class MyTimerTask implements Runnable{
 			
 			}
 			//闲家加分倒计时
-			if(NnTimeTaskEnum.PLAY_GAME_TIME.getCode()==type){
+			if(NnTimeTaskEnum.PLAY_GAME_TIME.getCode()==type&&timestamp==timeVo.getRestTime()){
 				//倒计时结束后进行发牌操作
 				ServerManager.futures.get(reqMsg.getRoomNo()).cancel(true);
 				HunNnManager.sendCard(reqMsg);
@@ -82,7 +84,7 @@ public class MyTimerTask implements Runnable{
 				
 			}
 			//展示比赛结果
-			if(NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode()==type){
+			if(NnTimeTaskEnum.SHOW_MATCH_RESULT_TIME.getCode()==type&&timestamp==timeVo.getRestTime()){
 				//时间到了触发一段空闲时间，主要是推送庄家准备倒计时,清除上局比赛的用户缓存数据
 				HunNnManager.setLandlordTimerTask(reqMsg);
 				

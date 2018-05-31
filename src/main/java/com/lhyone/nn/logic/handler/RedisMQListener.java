@@ -49,9 +49,6 @@ public class RedisMQListener extends JedisPubSub {
 			if(RedisMQEnum.CLOSE_ROOM_CHANNEL.getCode().equals(channel)){
 				HunNnManager.colseRoom(message);
 			}
-			if("test_1234_1234".equals(channel)){
-				HunNnManager.colseRoom(message);
-			}
 		}catch(Exception e){
 			logger.error("redisMq 监听器错误...",e.getMessage(),e);
 			e.printStackTrace();

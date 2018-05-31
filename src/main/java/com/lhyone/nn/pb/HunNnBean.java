@@ -6050,6 +6050,15 @@ public final class HunNnBean {
      * <code>optional int32 winGold = 4;</code>
      */
     int getWinGold();
+
+    /**
+     * <pre>
+     *手续费
+     * </pre>
+     *
+     * <code>optional int32 costGold = 5;</code>
+     */
+    int getCostGold();
   }
   /**
    * Protobuf type {@code UserChip}
@@ -6066,6 +6075,7 @@ public final class HunNnBean {
       userId_ = 0L;
       gold_ = 0;
       winGold_ = 0;
+      costGold_ = 0;
     }
 
     @java.lang.Override
@@ -6106,6 +6116,11 @@ public final class HunNnBean {
             case 32: {
 
               winGold_ = input.readInt32();
+              break;
+            }
+            case 40: {
+
+              costGold_ = input.readInt32();
               break;
             }
           }
@@ -6170,6 +6185,19 @@ public final class HunNnBean {
       return winGold_;
     }
 
+    public static final int COSTGOLD_FIELD_NUMBER = 5;
+    private int costGold_;
+    /**
+     * <pre>
+     *手续费
+     * </pre>
+     *
+     * <code>optional int32 costGold = 5;</code>
+     */
+    public int getCostGold() {
+      return costGold_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -6191,6 +6219,9 @@ public final class HunNnBean {
       if (winGold_ != 0) {
         output.writeInt32(4, winGold_);
       }
+      if (costGold_ != 0) {
+        output.writeInt32(5, costGold_);
+      }
     }
 
     public int getSerializedSize() {
@@ -6209,6 +6240,10 @@ public final class HunNnBean {
       if (winGold_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, winGold_);
+      }
+      if (costGold_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, costGold_);
       }
       memoizedSize = size;
       return size;
@@ -6232,6 +6267,8 @@ public final class HunNnBean {
           == other.getGold());
       result = result && (getWinGold()
           == other.getWinGold());
+      result = result && (getCostGold()
+          == other.getCostGold());
       return result;
     }
 
@@ -6249,6 +6286,8 @@ public final class HunNnBean {
       hash = (53 * hash) + getGold();
       hash = (37 * hash) + WINGOLD_FIELD_NUMBER;
       hash = (53 * hash) + getWinGold();
+      hash = (37 * hash) + COSTGOLD_FIELD_NUMBER;
+      hash = (53 * hash) + getCostGold();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -6373,6 +6412,8 @@ public final class HunNnBean {
 
         winGold_ = 0;
 
+        costGold_ = 0;
+
         return this;
       }
 
@@ -6398,6 +6439,7 @@ public final class HunNnBean {
         result.userId_ = userId_;
         result.gold_ = gold_;
         result.winGold_ = winGold_;
+        result.costGold_ = costGold_;
         onBuilt();
         return result;
       }
@@ -6447,6 +6489,9 @@ public final class HunNnBean {
         }
         if (other.getWinGold() != 0) {
           setWinGold(other.getWinGold());
+        }
+        if (other.getCostGold() != 0) {
+          setCostGold(other.getCostGold());
         }
         onChanged();
         return this;
@@ -6584,6 +6629,44 @@ public final class HunNnBean {
       public Builder clearWinGold() {
         
         winGold_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int costGold_ ;
+      /**
+       * <pre>
+       *手续费
+       * </pre>
+       *
+       * <code>optional int32 costGold = 5;</code>
+       */
+      public int getCostGold() {
+        return costGold_;
+      }
+      /**
+       * <pre>
+       *手续费
+       * </pre>
+       *
+       * <code>optional int32 costGold = 5;</code>
+       */
+      public Builder setCostGold(int value) {
+        
+        costGold_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *手续费
+       * </pre>
+       *
+       * <code>optional int32 costGold = 5;</code>
+       */
+      public Builder clearCostGold() {
+        
+        costGold_ = 0;
         onChanged();
         return this;
       }
@@ -6933,6 +7016,15 @@ public final class HunNnBean {
      */
     com.google.protobuf.ByteString
         getMarkBytes();
+
+    /**
+     * <pre>
+     *手续费
+     * </pre>
+     *
+     * <code>optional int32 costGold = 22;</code>
+     */
+    int getCostGold();
   }
   /**
    * Protobuf type {@code UserInfo}
@@ -6966,6 +7058,7 @@ public final class HunNnBean {
       landlordTimes_ = 0;
       uPositions_ = java.util.Collections.emptyList();
       mark_ = "";
+      costGold_ = 0;
     }
 
     @java.lang.Override
@@ -7114,6 +7207,11 @@ public final class HunNnBean {
               java.lang.String s = input.readStringRequireUtf8();
 
               mark_ = s;
+              break;
+            }
+            case 176: {
+
+              costGold_ = input.readInt32();
               break;
             }
           }
@@ -7652,6 +7750,19 @@ public final class HunNnBean {
       }
     }
 
+    public static final int COSTGOLD_FIELD_NUMBER = 22;
+    private int costGold_;
+    /**
+     * <pre>
+     *手续费
+     * </pre>
+     *
+     * <code>optional int32 costGold = 22;</code>
+     */
+    public int getCostGold() {
+      return costGold_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -7726,6 +7837,9 @@ public final class HunNnBean {
       }
       if (!getMarkBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 21, mark_);
+      }
+      if (costGold_ != 0) {
+        output.writeInt32(22, costGold_);
       }
     }
 
@@ -7812,6 +7926,10 @@ public final class HunNnBean {
       if (!getMarkBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(21, mark_);
       }
+      if (costGold_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(22, costGold_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -7873,6 +7991,8 @@ public final class HunNnBean {
           .equals(other.getUPositionsList());
       result = result && getMark()
           .equals(other.getMark());
+      result = result && (getCostGold()
+          == other.getCostGold());
       return result;
     }
 
@@ -7933,6 +8053,8 @@ public final class HunNnBean {
       }
       hash = (37 * hash) + MARK_FIELD_NUMBER;
       hash = (53 * hash) + getMark().hashCode();
+      hash = (37 * hash) + COSTGOLD_FIELD_NUMBER;
+      hash = (53 * hash) + getCostGold();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -8102,6 +8224,8 @@ public final class HunNnBean {
         }
         mark_ = "";
 
+        costGold_ = 0;
+
         return this;
       }
 
@@ -8159,6 +8283,7 @@ public final class HunNnBean {
           result.uPositions_ = uPositionsBuilder_.build();
         }
         result.mark_ = mark_;
+        result.costGold_ = costGold_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -8292,6 +8417,9 @@ public final class HunNnBean {
         if (!other.getMark().isEmpty()) {
           mark_ = other.mark_;
           onChanged();
+        }
+        if (other.getCostGold() != 0) {
+          setCostGold(other.getCostGold());
         }
         onChanged();
         return this;
@@ -9809,6 +9937,44 @@ public final class HunNnBean {
   checkByteStringIsUtf8(value);
         
         mark_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int costGold_ ;
+      /**
+       * <pre>
+       *手续费
+       * </pre>
+       *
+       * <code>optional int32 costGold = 22;</code>
+       */
+      public int getCostGold() {
+        return costGold_;
+      }
+      /**
+       * <pre>
+       *手续费
+       * </pre>
+       *
+       * <code>optional int32 costGold = 22;</code>
+       */
+      public Builder setCostGold(int value) {
+        
+        costGold_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *手续费
+       * </pre>
+       *
+       * <code>optional int32 costGold = 22;</code>
+       */
+      public Builder clearCostGold() {
+        
+        costGold_ = 0;
         onChanged();
         return this;
       }
@@ -13024,30 +13190,31 @@ public final class HunNnBean {
       ".CardInfo\022\021\n\ttotalGold\030\003 \001(\003\022\017\n\007perGold\030" +
       "\004 \001(\005\022\020\n\010listGold\030\005 \003(\005\022\014\n\004uids\030\006 \003(\003\022\017\n" +
       "\007winGold\030\007 \001(\005\022\033\n\010userChip\030\010 \003(\0132\t.UserC" +
-      "hip\"9\n\010UserChip\022\016\n\006userId\030\001 \001(\003\022\014\n\004gold\030" +
-      "\002 \001(\005\022\017\n\007winGold\030\004 \001(\005\"\225\003\n\010UserInfo\022\016\n\006u" +
-      "serId\030\001 \001(\003\022\n\n\002ip\030\002 \001(\t\022\r\n\005token\030\003 \001(\t\022\020" +
-      "\n\010nickName\030\004 \001(\t\022\017\n\007headUrl\030\005 \001(\t\022\016\n\006gen" +
-      "der\030\006 \001(\005\022\022\n\nplayerType\030\007 \001(\005\022\020\n\010positio",
-      "n\030\010 \001(\005\022\016\n\006roomNo\030\t \001(\t\022\027\n\004card\030\n \001(\0132\t." +
-      "CardInfo\022\017\n\007perGold\030\013 \001(\005\022\020\n\010baseGold\030\014 " +
-      "\001(\005\022\017\n\007winGold\030\r \001(\005\022\021\n\ttotalGold\030\016 \001(\003\022" +
-      "\020\n\010userGold\030\017 \001(\003\022\017\n\007isReday\030\020 \001(\005\022\021\n\tre" +
-      "dayTime\030\021 \001(\003\022\027\n\017isApplyLandlord\030\022 \001(\005\022\025" +
-      "\n\rlandlordTimes\030\023 \001(\005\022!\n\nuPositions\030\024 \003(" +
-      "\0132\r.PositionInfo\022\014\n\004mark\030\025 \001(\t\"\265\002\n\010RoomI" +
-      "nfo\022\016\n\006roomNo\030\001 \001(\t\022\032\n\022roomMaxPersonCoun" +
-      "t\030\002 \001(\005\022\032\n\022roomCurPersonCount\030\003 \001(\005\022\031\n\021r" +
-      "oomCurMatchCount\030\004 \001(\005\022#\n\ncardDouble\030\005 \003",
-      "(\0132\017.CardTypeDouble\022\025\n\rroomCurStatus\030\006 \001" +
-      "(\005\022\032\n\022roomCurMatchStatus\030\007 \001(\005\022\017\n\007minGol" +
-      "d\030\010 \001(\005\022\020\n\010costGold\030\t \001(\005\022\030\n\020curLandlord" +
-      "Times\030\n \001(\005\022\030\n\020maxLandlordTimes\030\013 \001(\005\022\027\n" +
-      "\017minLandlordGold\030\014 \001(\005\"=\n\010CardInfo\022\013\n\003nu" +
-      "m\030\001 \003(\005\022\020\n\010cardType\030\002 \001(\005\022\022\n\ncardDouble\030" +
-      "\003 \001(\005\"6\n\016CardTypeDouble\022\020\n\010cardType\030\001 \001(" +
-      "\005\022\022\n\ncardDouble\030\002 \001(\005B\035\n\020com.lhyone.nn.p" +
-      "bB\tHunNnBeanb\006proto3"
+      "hip\"K\n\010UserChip\022\016\n\006userId\030\001 \001(\003\022\014\n\004gold\030" +
+      "\002 \001(\005\022\017\n\007winGold\030\004 \001(\005\022\020\n\010costGold\030\005 \001(\005" +
+      "\"\247\003\n\010UserInfo\022\016\n\006userId\030\001 \001(\003\022\n\n\002ip\030\002 \001(" +
+      "\t\022\r\n\005token\030\003 \001(\t\022\020\n\010nickName\030\004 \001(\t\022\017\n\007he" +
+      "adUrl\030\005 \001(\t\022\016\n\006gender\030\006 \001(\005\022\022\n\nplayerTyp",
+      "e\030\007 \001(\005\022\020\n\010position\030\010 \001(\005\022\016\n\006roomNo\030\t \001(" +
+      "\t\022\027\n\004card\030\n \001(\0132\t.CardInfo\022\017\n\007perGold\030\013 " +
+      "\001(\005\022\020\n\010baseGold\030\014 \001(\005\022\017\n\007winGold\030\r \001(\005\022\021" +
+      "\n\ttotalGold\030\016 \001(\003\022\020\n\010userGold\030\017 \001(\003\022\017\n\007i" +
+      "sReday\030\020 \001(\005\022\021\n\tredayTime\030\021 \001(\003\022\027\n\017isApp" +
+      "lyLandlord\030\022 \001(\005\022\025\n\rlandlordTimes\030\023 \001(\005\022" +
+      "!\n\nuPositions\030\024 \003(\0132\r.PositionInfo\022\014\n\004ma" +
+      "rk\030\025 \001(\t\022\020\n\010costGold\030\026 \001(\005\"\265\002\n\010RoomInfo\022" +
+      "\016\n\006roomNo\030\001 \001(\t\022\032\n\022roomMaxPersonCount\030\002 " +
+      "\001(\005\022\032\n\022roomCurPersonCount\030\003 \001(\005\022\031\n\021roomC",
+      "urMatchCount\030\004 \001(\005\022#\n\ncardDouble\030\005 \003(\0132\017" +
+      ".CardTypeDouble\022\025\n\rroomCurStatus\030\006 \001(\005\022\032" +
+      "\n\022roomCurMatchStatus\030\007 \001(\005\022\017\n\007minGold\030\010 " +
+      "\001(\005\022\020\n\010costGold\030\t \001(\005\022\030\n\020curLandlordTime" +
+      "s\030\n \001(\005\022\030\n\020maxLandlordTimes\030\013 \001(\005\022\027\n\017min" +
+      "LandlordGold\030\014 \001(\005\"=\n\010CardInfo\022\013\n\003num\030\001 " +
+      "\003(\005\022\020\n\010cardType\030\002 \001(\005\022\022\n\ncardDouble\030\003 \001(" +
+      "\005\"6\n\016CardTypeDouble\022\020\n\010cardType\030\001 \001(\005\022\022\n" +
+      "\ncardDouble\030\002 \001(\005B\035\n\020com.lhyone.nn.pbB\tH" +
+      "unNnBeanb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -13090,13 +13257,13 @@ public final class HunNnBean {
     internal_static_UserChip_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UserChip_descriptor,
-        new java.lang.String[] { "UserId", "Gold", "WinGold", });
+        new java.lang.String[] { "UserId", "Gold", "WinGold", "CostGold", });
     internal_static_UserInfo_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_UserInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UserInfo_descriptor,
-        new java.lang.String[] { "UserId", "Ip", "Token", "NickName", "HeadUrl", "Gender", "PlayerType", "Position", "RoomNo", "Card", "PerGold", "BaseGold", "WinGold", "TotalGold", "UserGold", "IsReday", "RedayTime", "IsApplyLandlord", "LandlordTimes", "UPositions", "Mark", });
+        new java.lang.String[] { "UserId", "Ip", "Token", "NickName", "HeadUrl", "Gender", "PlayerType", "Position", "RoomNo", "Card", "PerGold", "BaseGold", "WinGold", "TotalGold", "UserGold", "IsReday", "RedayTime", "IsApplyLandlord", "LandlordTimes", "UPositions", "Mark", "CostGold", });
     internal_static_RoomInfo_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_RoomInfo_fieldAccessorTable = new

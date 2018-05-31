@@ -13,12 +13,17 @@ public class NnWork implements Runnable {
 	}
 	
 	public void run() {
-			nnTask();
+			try {
+				nnTask();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 	}
 	
-	private void nnTask(){
+	private void nnTask() throws InterruptedException{
 		switch (type) {
 		case 1:
+			Thread.sleep(200);
 			HunNnManager.showMatchResult(reqMsg.getRoomNo());
 			break;
 		default:

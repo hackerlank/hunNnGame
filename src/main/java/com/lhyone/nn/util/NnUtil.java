@@ -11,12 +11,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.googlecode.protobuf.format.JsonFormat;
 import com.lhyone.nn.dao.NnManagerDao;
 import com.lhyone.nn.entity.NnRoomMultipleDic;
+import com.lhyone.nn.enums.GameDicParamEnum;
 import com.lhyone.nn.enums.NnCardRuleEnum;
 import com.lhyone.nn.pb.HunNnBean;
 import com.lhyone.util.RedisUtil;
 
 public class NnUtil {
-	
+	private final static int COST_RATE=8;
+	private final static int HUN_NN_LANDLORD_COST_GOLD_RATE=20000;
 	/**庄家加注积分*/
 	private static List<NnRoomMultipleDic>  getListNnRoomMultipleDic(){
 		String str=RedisUtil.get(NnConstans.NN_ROOM_MULTIPLE_DIC_PRE);
@@ -269,12 +271,28 @@ public class NnUtil {
 		RedisUtil.hdel(NnConstans.NN_ROOM_PRE+roomNo, "sendGoldTimer");
 	}
 	
+	public static int getCostRate(){
+		String str=RedisUtil.hget(NnConstans.GAME_DIC_CACHE, GameDicParamEnum.HUN_NN_COST_RATE.name());
+		if(StringUtils.isEmpty(str)){
+			return COST_RATE;
+		}
+		return Integer.parseInt(str);
+	}
 	
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) throws InterruptedException {
 //		 Map<String,HunNnBean.PositionInfo> map=NnUtil.getPositionInfoToMap("200106");
 //		 System.out.println(map);
 		 
 		 int type=NnUtil.getCardTypeDouble(NnCardRuleEnum.NIU_NIU.getCode());
+		 
+		 while(true){
+			 System.out.println("===========================");
+			 Map<String,HunNnBean.PositionInfo> map= NnUtil.getPositionInfoToMap("202787");
+			 System.out.println(map);
+			 Thread.sleep(400);
+		 }
+		 
 	}
 	
 	
